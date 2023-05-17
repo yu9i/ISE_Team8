@@ -1,8 +1,9 @@
 @import './base.css';
 
 #app {
-  max-width: 1280px;
-  margin: 0 auto;
+  /* max-width: 1280px; */
+  width: 100%;
+  align-items: center;
 }
 
 header {
@@ -10,19 +11,90 @@ header {
   opacity: 0.8;
   color: white;
   margin-bottom: 1em;
-  padding: 1.5em;
+  padding: 1.5rem 2.5rem;
   font-weight: bold;
 }
 
 header > .header-const {
   display: flex;
+  flex-wrap: wrap;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
 }
 
-main {
-  padding: 2rem;
+.main {
+  display: grid;
+  grid-template-columns: 2fr 6fr 2fr;
+  justify-items: center;
+}
+
+.main-menu {
+  font-size: 1.3em;
+  font-weight: bold;
+  align-items: center;
+  padding: 1em;
+}
+
+.main-menu > .main-menu-box {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  background: #FFFBEB;
+  border: solid 1px black;
+  border-radius: 5px;
+  padding: 2.5em 1.5em;
+}
+
+.main-menu > .main-menu-box > div {
+  padding: 0.5em 0;
+}
+
+.main-posts {
+  background: #ECECEC;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  text-align: center;
+  align-items: center;
+  width: 94%;
+}
+
+.main-posts > #page-name {
+  padding: 0.5em;
+}
+
+.main-posts > .post {
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  background: white;
+  border: solid 1px black;
+  border-radius: 10px;
+  padding: 5px;
+  margin: 1em 0;
+}
+
+.main-posts > .post > #post-title {
+  font-weight: bold;
+  font-size: 1.3em;
+}
+
+.main-posts > .post > .post-content > #post-det {
+  font-size: 1.2em;
+}
+
+.main-page {
+  align-content: center;
+  display: flex;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 }
 
 a,
@@ -39,14 +111,11 @@ a,
 }
 
 @media (min-width: 1024px) {
-  body > main{
+  body > .main{
     display: flex;
     place-items: center;
   }
 
   #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
   }
 }
