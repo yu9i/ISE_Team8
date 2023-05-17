@@ -28,13 +28,10 @@ import TheWelcome from './components/TheWelcome.vue'
     </div>
 
     <div class="main-page">
-      <div class="page-select">
-        <div>Home</div>
-        <div>Team</div>
-        <div></div>
-      </div>
-      <div class="main-show-profile">profile</div>
-      <div id="add-post">글 추가</div>
+      <div class="page-home">Home</div>
+      <div class="page-team">Team</div>
+      <div class="page-profile">profile</div>
+      <div Onclick=""><font-awesome-icon icon="fa-solid fa-square-plus" /></div>
     </div>
 
   </div>
