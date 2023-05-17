@@ -12,7 +12,7 @@
       <div class="modal-overlay" v-if="showModal">
         <div class="modal">
           <div class="modal-content">
-            <span class="close" @click="showModal = false">&times;</span>
+            <span class="close" @click="resetRecruit">&times;</span>
             <h3 class="modal-title">Recruit Form 작성</h3>
             <div class="input-group">
               <label for="title-input">제목</label>
@@ -20,7 +20,7 @@
             </div>
             <div class="input-group">
               <label for="content-input">내용</label>
-              <textarea id="content-input" v-model="recruitForm.content" placeholder="내용" @input="limitText"></textarea>
+              <textarea id="content-input" v-model="recruitForm.content" placeholder="내용" :style="{height: textareaHeight}" @input="limitText"></textarea>
               <div class="word-count">{{ contentLength }}/100자</div>
             </div>
             <div class="input-group">
@@ -45,7 +45,8 @@
           <h3 class="team-title">{{ post.title }}</h3>
           <p class="team-content">{{ post.content }}</p>
           <p class="team-recruitment">모집 인원: {{ post.recruitment }}</p>
-          <button @click="applyTeam(post)" :disabled="isRecruitmentClosed(post)">신청</button>
+          <button v-if="!isRecruitmentClosed(post)" @click="applyTeam(post)">신청</button>
+          <p class="recruit-done" v-if="isRecruitmentClosed(post)">마감!</p>
           </div>
         </div>
       </div>
@@ -66,18 +67,40 @@
       <div class="modal">
       <div class="modal-content">
         <span class="close" @click="showRequestModal = false">&times;</span>
-        <h3>{{ selectedTeam.title }}</h3>
-        <div v-for="request in selectedTeam.requests" :key="request.id" class="member-request">
-          <h4>{{ request.userName }}</h4>
-          <p>{{ request.message }}</p>
-          <div v-if="!request.approved && !request.rejected">
-            <button @click="approveRequest(selectedTeam, request)">승인</button>
-            <button @click="rejectRequest(selectedTeam, request)">거절</button>
-          </div>
-          <p v-if="request.approved">승인되었습니다!</p>
-          <p v-if="request.rejected">거절되었습니다.</p>
-        </div>
-        <p v-if="isRecruitmentClosed(selectedTeam)">모집이 마감되었습니다.</p>
+        <h3 class="modal-title">{{ selectedTeam.title }}</h3>
+        <table class="member-requests-table" style="width:100%;">
+          <colgroup>
+            <col style="width: 20%;">
+            <col style="width: 40%;">
+            <col style="width: 20%;">
+          </colgroup>
+          <thead>
+            <tr>
+              <th>신청인</th>
+              <th>내용</th>
+              <th>승인/거절</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="request in selectedTeam.requests" :key="request.id">
+              <td>{{ request.userName }}</td>
+              <td>{{ request.message }}</td>
+              <td>
+                <!-- 승인/거절 버튼을 일렬로 표시 -->
+                <div class="button-container">
+                  <button v-if="!request.approved && !request.rejected" @click="approveRequest(selectedTeam, request)" class="request-button">승인</button>
+                  <button v-if="!request.approved && !request.rejected" @click="rejectRequest(selectedTeam, request)" class="request-button">거절</button>
+                  <p v-if="request.approved" class="request-status">승인되었습니다!</p>
+                  <p v-if="request.rejected" class="request-status">거절되었습니다.</p>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p v-if="!isRecruitmentClosed(selectedTeam)" class="recruitment-status">
+          {{ '(승인된 인원) ' + getApprovedCount(selectedTeam) + ' / (모집인원) ' + selectedTeam.recruitment }}
+        </p>
+        <p v-else class="recruitment-status">모집이 마감되었습니다.</p>
       </div>
       </div>
     </div>
@@ -86,9 +109,13 @@
       <div class="modal">
       <div class="modal-content">
         <span class="close" @click="closePasswordModal">&times;</span>
-        <h3>비밀번호 확인</h3>
-        <input type="password" v-model="passwordInput" placeholder="비밀번호를 입력하세요">
-        <button @click="confirmPassword(selectedTeam)">확인</button>
+        <h3 class="modal-title">비밀번호 확인</h3>
+        <div class="input-group">
+        <input type="password" v-model="passwordInput" placeholder="비밀번호를 입력하세요" class="password-input">
+        </div>
+        <div class="button-container">
+        <button @click="confirmPassword(selectedTeam)" class="modal-button">확인</button>
+        </div>
       </div>
     </div>
     </div>
@@ -102,6 +129,7 @@ export default {
       width: 0,
       height: 0,
       contentLength: 0,
+      textareaHeight: 'auto',
       showModal: false,
       showRequestModal: false,
       showPasswordModal: false,
@@ -140,6 +168,17 @@ export default {
       this.width = window.innerWidth;
       this.height = window.innerHeight;
     },
+    updateTextareaSize() {
+      const textarea = this.$refs.textarea; // textarea 요소에 대한 참조를 얻습니다.
+      textarea.style.height = 'auto'; // 초기 높이를 'auto'로 설정합니다.
+      textarea.style.height = `${textarea.scrollHeight}px`; // 스크롤 높이에 맞게 높이를 조정합니다.
+    },
+    limitText() {
+      // 텍스트 제한 로직을 구현합니다.
+      // 필요한 경우 textarea 내용이 변경될 때마다 호출됩니다.
+      // 예: 글자 수 제한, 입력 유효성 검사 등
+      this.updateTextareaSize(); // textarea 크기를 업데이트합니다.
+    },
     limitText() {
       this.contentLength = this.recruitForm.content.length;
       if (this.contentLength > 100) {
@@ -175,6 +214,14 @@ export default {
       // 게시한 글 객체 리턴
       //return post;
     },
+    resetRecruit(){
+    this.recruitForm.title = '';
+      this.recruitForm.content = '';
+      this.recruitForm.recruitment = 0;
+      this.recruitForm.password = '';
+      this.contentLength = 0;
+      this.showModal = false;
+    },
     applyTeam(post) {
       const existingTeam = this.teams.find((team) => team.id === post.id);
       const approvedRequestsCount = existingTeam ? existingTeam.requests.filter((request) => request.approved).length : 0;
@@ -183,6 +230,9 @@ export default {
         alert('신청이 마감되었습니다.');
         return;
       }
+      
+      console.log(approvedRequestsCount)
+      console.log(post.recruitment)
 
       const newRequest = {
         userName: '신청한 사용자 이름',
@@ -206,13 +256,16 @@ export default {
     approveRequest(team, request) {
       if (team.requests.filter((r) => r.approved).length >= team.recruitment) {
         // 이미 모집 인원이 다 찬 경우
-        alert('신청이 마감되었습니다.');
+        alert('모집이 마감되었습니다.');
         return;
       }
       request.approved = true;
     },
     rejectRequest(team, request) {
       request.rejected = true;
+    },
+    getApprovedCount(team) {
+      return team.requests.filter((r) => r.approved).length;
     },
     openModal(team) {
       this.passwordInput = '';
@@ -250,7 +303,7 @@ body {
 }
 
 .page-title {
-  background-color: #888;
+  background-color: #4E4E4ECC;
   color: #fff;
   height: 3rem;
   width: 100%;
@@ -267,7 +320,7 @@ body {
 }
 
 .main-content {
-  background-color: #fff;
+  background-color: #ffffff;
   padding: 1rem;
   display: grid; 
   grid-template-columns: 0.5fr 2fr 1fr; 
@@ -275,7 +328,7 @@ body {
 }
 
 .section{
-  background-color: #ddd;
+  background-color: #f5f5f5;
   padding: 2rem;
   text-align: center;
   flex: 1;
@@ -283,7 +336,7 @@ body {
 }
 
 .section:nth-child(1) {
-  background-color: #ddd;
+  background-color: #f5f5f5;
   padding: 2rem;
   text-align: center;
   height: auto;
@@ -291,7 +344,7 @@ body {
 
 /* 승인하기(section) 좁게 */
 .section:nth-child(2) {
-  background-color: #ddd;
+  background-color: #f5f5f5;
   padding: 2rem;
   text-align: center;
   height: auto;
@@ -337,6 +390,10 @@ body {
   font-size: 0.8rem; /* 원하는 글자 크기로 변경 */
 }
 
+.recruit-done{
+  width: 100%;
+  font-size: 0.7rem;
+}
 
 .approve-info {
   background-color: #ffffff;
@@ -404,6 +461,22 @@ button:hover {
 }
 
 .modal-button:hover {
+  background-color: #5f5f5f; 
+}
+
+.request-button{
+  margin-bottom: 1rem;
+  background-color: hsl(60, 27%, 2%); 
+  color: #ffffff;
+  padding: 0.3rem 0.5rem; 
+  font-size: 0.7rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 30%;
+}
+
+.request-button:hover {
   background-color: #5f5f5f; 
 }
 
@@ -475,7 +548,53 @@ button:hover {
 }
 
 .word-count {
+  padding: 10px;
   font-size: 12px;
+}
+
+.modal-content .password-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.modal-approve{
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
+.member-requests-table {
+  max-height: 300px; /* 예시로 최대 높이를 300px로 설정 */
+  overflow-y: auto;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.member-requests-table th,
+.member-requests-table td {
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+.member-requests-table th {
+  background-color: #f2f2f2;
+}
+
+.member-requests-table tr {
+  height: auto;
+}
+
+.member-requests-table td .button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+
+.request-status{
+  text-align: center;
 }
 
 .button-container {
