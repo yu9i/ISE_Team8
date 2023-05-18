@@ -169,15 +169,12 @@ export default {
       this.height = window.innerHeight;
     },
     updateTextareaSize() {
-      const textarea = this.$refs.textarea; // textarea 요소에 대한 참조를 얻습니다.
-      textarea.style.height = 'auto'; // 초기 높이를 'auto'로 설정합니다.
-      textarea.style.height = `${textarea.scrollHeight}px`; // 스크롤 높이에 맞게 높이를 조정합니다.
+      const textarea = this.$refs.textarea;
+      textarea.style.height = 'auto';
+      textarea.style.height = `${textarea.scrollHeight}px`; 
     },
     limitText() {
-      // 텍스트 제한 로직을 구현합니다.
-      // 필요한 경우 textarea 내용이 변경될 때마다 호출됩니다.
-      // 예: 글자 수 제한, 입력 유효성 검사 등
-      this.updateTextareaSize(); // textarea 크기를 업데이트합니다.
+      this.updateTextareaSize(); 
     },
     limitText() {
       this.contentLength = this.recruitForm.content.length;
@@ -187,7 +184,6 @@ export default {
       }
     },
     postRecruit() { 
-      // Recruit 글 작성 기능 구현
       if (!/^\d{4}$/.test(this.recruitForm.password)) {
         alert("비밀번호는 4자리 숫자로 입력해주세요.");
         return;
@@ -203,16 +199,13 @@ export default {
         
       };
       this.posts.push(post);
-      // 게시 후 폼 초기화
+
       this.recruitForm.title = '';
       this.recruitForm.content = '';
       this.recruitForm.recruitment = 0;
       this.recruitForm.password = '';
       this.contentLength = 0;
       this.showModal = false;
-
-      // 게시한 글 객체 리턴
-      //return post;
     },
     resetRecruit(){
     this.recruitForm.title = '';
@@ -255,7 +248,6 @@ export default {
     },
     approveRequest(team, request) {
       if (team.requests.filter((r) => r.approved).length >= team.recruitment) {
-        // 이미 모집 인원이 다 찬 경우
         alert('모집이 마감되었습니다.');
         return;
       }
@@ -332,7 +324,7 @@ body {
   padding: 2rem;
   text-align: center;
   flex: 1;
-  margin-top: 0.1em; /* main-content와의 간격 설정 */
+  margin-top: 0.1em; 
 }
 
 .section:nth-child(1) {
@@ -342,7 +334,6 @@ body {
   height: auto;
 }
 
-/* 승인하기(section) 좁게 */
 .section:nth-child(2) {
   background-color: #f5f5f5;
   padding: 2rem;
@@ -373,21 +364,18 @@ body {
 }
 
 .team-title {
-  /* 제목의 너비와 글자 크기 지정 */
-  width: 100%; /* 원하는 너비로 변경 */
-  font-size: 1.2rem; /* 원하는 글자 크기로 변경 */
+  width: 100%; 
+  font-size: 1.2rem;
 }
 
 .team-content {
-  /* 내용의 너비와 글자 크기 지정 */
-  width: 100%; /* 원하는 너비로 변경 */
-  font-size: 0.9rem; /* 원하는 글자 크기로 변경 */
+  width: 100%; 
+  font-size: 0.9rem; 
 }
 
 .team-recruitment {
-  /* 모집 인원의 너비와 글자 크기 지정 */
-  width: 100%; /* 원하는 너비로 변경 */
-  font-size: 0.8rem; /* 원하는 글자 크기로 변경 */
+  width: 100%; 
+  font-size: 0.8rem;
 }
 
 .recruit-done{
@@ -526,7 +514,7 @@ button:hover {
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* 세로 중앙 정렬 */
+  justify-content: center; 
   text-align: center;
   line-height: 3rem;
   font-size: 14px;
@@ -565,7 +553,7 @@ button:hover {
 }
 
 .member-requests-table {
-  max-height: 300px; /* 예시로 최대 높이를 300px로 설정 */
+  max-height: 300px; 
   overflow-y: auto;
   border-collapse: collapse;
   width: 100%;
