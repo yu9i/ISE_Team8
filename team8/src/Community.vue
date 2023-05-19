@@ -1,0 +1,376 @@
+<script setup>
+// import HelloWorld from './components/HelloWorld.vue'
+// import TheWelcome from './components/TheWelcome.vue'
+</script>
+
+<template>
+  <div class="main" :style="{}">
+    <div class="main-community">
+      <div class="main-menu">
+        <div class="main-menu-box">
+          <div>졸업작품/논문</div>
+          <div>인턴</div>
+          <div>1만 라인</div>
+          <div>산학협력프로젝트</div>
+          <div>기타</div>
+        </div>
+      </div>
+
+      <div class="main-posts">
+        <div id="page-name"><h1>졸업작품/논문</h1></div>
+        <div class="post">
+          <div id="post-title">졸업 작품 관련 질문</div>
+          <div class="post-content">
+            <div id="post-pic"></div>
+            <div id="post-det">안녕하세요. 저는 소프트웨어학과 ㅁㅁ학번 학생 입니다. 곧, 중간보고서 제출 기간이어서 중간보고서를 작성하고 있는데 궁금한 점이 몇 개 있습니다. 보고서 양식을 보면 서명란이 있는데 교수님께 작접 서명을 안 받아도 되는 것이 맞나요? 그리고 제출할 때 파일 양식은 따로 정해져 있나요? 제출 양식 관련 내용이 안 적혀져 있어서 질문 드립니다.</div>
+          </div>
+          <div class="likecomment">
+            <div class="like"></div>
+            <div class="comment"></div>
+          </div>
+        </div>
+        <div v-for="post in posts" :key="post.id" class="post">
+          <div id="post-title">{{post.title}}</div>
+          <div class="post-content">
+            <div id="post-pic"></div>
+            <div id="post-det">{{post.content}}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="main-page">
+        <div class="page-home" Onclick="">Home</div>
+        <div class="page-team" Onclick="">Team</div>
+        <div class="page-profile">
+          <div class="page-profile-top">
+            <div id="page-profile-pic"></div>
+            <div id="page-profile-name">이름</div>
+          </div>
+          <div class="page-profile-mid">
+            <div id="page-profile-dep">소프트웨어학과</div>
+            <div id="page-profile-grad">2025년 2월 졸업 예정</div>
+          </div>
+          <div class="page-profile-bottom" Onclick="">내 프로필 보러가기</div>
+        </div>
+        <div class="main-add-postb" @click="ShowAddPost = true"><font-awesome-icon icon="fa-solid fa-square-plus" size="3x"/></div>
+      </div>
+    </div>
+
+    <div class="commu-add-post" v-if="ShowAddPost">
+      <div class="commu-add-new">
+        <div class="commu-add-title">
+          <input type="text" id="commu-add-title" v-model="PostForm.title" required minlength="2" @input="PostLimitText" placeholder="제목을 입력하세요">
+        </div>
+        <div class="commu-add-cont">
+          <textarea id="comm-add-cont" v-model="PostForm.content" placeholder="내용을 입력해주세요" required rows="20" cols="60"  @input="PostLimitText"></textarea>
+          <div class="commu-word-count">{{contentLength}}/500자</div>
+        </div>
+        <div class="commu-add-file">
+          <input type="file" id="commu-add-file" accept="image/*, .pdf, .doc">
+        </div>
+        <div class="commu-add-ornot">
+          <div class="commu-add-cancel" @click="CancelPost">취소</div>
+          <div class="commu-add-all" @click="PostAll">추가하기</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</template>
+
+<script>
+  export default {
+    data() {
+        return {
+            ShowAddPost: false,
+            ShowPost: false,
+            titleLength: 0,
+            contentLength: 0,
+            PostForm: {
+                title: "",
+                content: "",
+                file: "",
+            },
+            posts: [], //post 목록
+        };
+    },
+
+    methods:{
+      PostLimitText() {
+        this.titleLength = this.PostForm.title.length;
+        this.contentLength = this.PostForm.content.length;
+        if (this.titleLength > 15) {
+          alert('제목은 2자 이상, 15자 이하로 작성해주세요.');
+        }
+        if (this.contentLength > 500) {
+          alert('내용은 2자 이상, 500자 이하로 작성해주세요.');
+        }
+      },
+
+      AddPost(){
+        console.log(this.AddPost);
+      },
+
+      PostAll(){
+        this.titleLength = this.PostForm.title.length;
+        this.contentLength = this.PostForm.content.length;
+        if(this.titleLength < 2 || this.contentLength < 2){
+          alert("제목과 내용은 2자 이상으로 작성해주세요.");
+          return;
+        }
+
+        const post = {
+          id: this.posts.length + 1,
+          name: "name",
+          title: this.PostForm.title,
+          content: this.PostForm.content,
+          good: 0,
+          comment: [],
+        };
+        this.posts.push(post);
+
+        this.CancelPost();
+      },
+
+      CancelPost(){
+        this.PostForm.title = "";
+        this.PostForm.content = "";
+        this.PostForm.file = "";
+        this.contentLength = 0;
+        this.AddPost = false;
+      },
+    }
+  }
+</script>
+
+
+<style scoped>
+
+.main {
+  display: block;
+}
+
+.main-community{
+  max-height: 800px;
+  display: grid;
+  grid-template-columns: 2fr 6fr 2fr;
+  justify-items: center;
+}
+
+.main-menu {
+  font-size: 1.3em;
+  align-items: center;
+  padding: 1em;
+}
+
+.main-menu > .main-menu-box {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  background: #FFFBEB;
+  border: solid 1px black;
+  border-radius: 5px;
+  padding: 2.5em 1.5em;
+}
+
+.main-menu > .main-menu-box > div {
+  padding: 0.5em 0;
+  cursor: pointer;
+}
+
+.main-menu > .main-menu-box > div:hover {
+  font-weight: bold;
+}
+
+.main-posts {
+  background: #ECECEC;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  text-align: center;
+  align-items: center;
+  width: 94%;
+  max-height: 750px;
+  margin-bottom: 3em;
+  padding-bottom: 2em;
+  overflow-y: scroll;
+}
+
+.main-posts > #page-name {
+  padding: 0.5em;
+}
+
+.main-posts > .post {
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  background: white;
+  border: solid 1px black;
+  border-radius: 10px;
+  padding: 5px;
+  margin: 8px 0;
+  cursor: pointer;
+}
+
+.main-posts > .post > #post-title {
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.main-posts > .post > .post-content {
+  padding: 0.8em;
+}
+
+.main-posts > .post > .post-content > #post-det {
+  display: -webkit-box;
+  font-size: 1em;
+  text-align: left;
+  white-space: normal;
+  word-wrap: break-word;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.main-page {
+  width: 100%;
+  align-content: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0 1em;
+}
+
+.main-page > div {
+  font-size: 1.1em;
+  margin: 1em;
+}
+
+.main-page > .page-home, .main-page >.page-team {
+  cursor: pointer;
+}
+
+.main-page > .page-home:hover, .main-page >.page-team:hover {
+  font-weight: bold;
+}
+
+.main-page > .page-profile {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+  border: solid 1px black;
+  border-radius: 10px;
+  align-items: center;
+  padding: 5px;
+}
+
+.main-page > .page-profile > div {
+  margin: 7px;
+}
+
+.main-page > .page-profile > .page-profile-top > #page-profile-name {
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.main-page > .page-profile > .page-profile-mid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.main-page > .page-profile > .page-profile-bottom {
+  color: #a4a4a4;
+}
+
+.main-page > .page-profile >.page-profile-bottom:hover {
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.main-page > .main-add-postb:hover {
+  cursor: pointer;
+}
+
+.commu-add-post {
+  display: block;
+}
+
+.commu-add-new {
+  background: white;
+  width: auto;
+  position: fixed;
+  top: 15%;
+  left: 50%;
+  transform: translateX( -50% );
+  border: solid 1px black;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 1em 2.5em;
+  font-size: 1.1em;
+}
+
+.commu-add-new > div {
+  margin: 5px;
+}
+
+.commu-add-new > .commu-add-title{
+  
+}
+
+.commu-add-new > .commu-add-title > #commu-add-title{
+  width: 20em;
+  height: 2em;
+  font-size: 1.3em;
+  font-weight: bold;
+}
+
+.commu-add-new > .commu-add-cont > .commu-word-count{
+  text-align: right;
+}
+
+.commu-add-new > .commu-add-file{
+  
+}
+
+.commu-add-ornot {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.commu-add-new > .commu-add-ornot > .commu-add-cancel{
+  color:#a8a8a8;
+  border: solid 2px #a4a4a4;
+  border-radius: 10px;
+  padding: 0.2em 1em;
+  font-size: 1em;
+  cursor: pointer;
+  margin: 5px;
+}
+
+.commu-add-new > .commu-add-ornot > .commu-add-all{
+  background: #9ef686;
+  border: solid 2px #92d035;
+  border-radius: 10px;
+  padding: 0.2em 1em;
+  font-size: 1.2em;
+  font-weight: bold;
+  cursor: pointer;
+  margin: 5px;
+}
+
+</style>

@@ -132,7 +132,6 @@
           </div>
           <div class="page-profile-bottom" Onclick="">내 프로필 보러가기</div>
         </div>
-        <div class="main-add-postb" @click="AddPost()"><font-awesome-icon icon="fa-solid fa-square-plus" size="3x"/></div>
       </div>
     </div>
   </div>
@@ -224,7 +223,7 @@ export default {
       this.showModal = false;
     },
     resetRecruit(){
-    this.recruitForm.title = '';
+      this.recruitForm.title = '';
       this.recruitForm.content = '';
       this.recruitForm.recruitment = 0;
       this.recruitForm.password = '';
