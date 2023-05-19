@@ -186,7 +186,7 @@ header > .header-const {
   background: white;
   width: auto;
   position: fixed;
-  top: 20%;
+  top: 15%;
   left: 50%;
   transform: translateX( -50% );
   border: solid 1px black;
@@ -205,12 +205,14 @@ header > .header-const {
 }
 
 .commu-add-new > .commu-add-title{
-
+  
 }
 
 .commu-add-new > .commu-add-title > #commu-add-title{
   width: 20em;
   height: 2em;
+  font-size: 1.3em;
+  font-weight: bold;
 }
 
 .commu-add-new > .commu-add-cont{
@@ -228,6 +230,15 @@ header > .header-const {
   padding: 0.2em 1em;
   font-size: 1.2em;
   font-weight: bold;
+  cursor: pointer;
+}
+
+.commu-add-new > .commu-add-cancel{
+  color:#a8a8a8;
+  border: solid 1px #a4a4a4;
+  padding: 2px 1em;
+  border-radius: 10px;
+  cursor: pointer;
 }
 
 /*******************************************************************************/

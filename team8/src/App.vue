@@ -1,6 +1,6 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+// import HelloWorld from './components/HelloWorld.vue'
+// import TheWelcome from './components/TheWelcome.vue'
 </script>
 
 <template>
@@ -104,11 +104,16 @@ import TheWelcome from './components/TheWelcome.vue'
     <div class="commu-add-post">
       <div class="commu-add-new">
         <div class="commu-add-title">
-          <input type="text" id="commu-add-title" name="" required minlength="2" maxlength="15" placeholder="제목을 입력하세요">
+          <input type="text" id="commu-add-title" name="commu-add-title" required minlength="2" maxlength="15" placeholder="제목을 입력하세요">
         </div>
-        <div class="commu-add-det">내용</div>
-        <div class="commu-add-file">파일</div>
+        <div class="commu-add-cont">
+          <textarea id="comm-add-cont" name="commu-add-cont" placeholder="내용을 입력해주세요" required rows="20" cols="60" ></textarea>
+        </div>
+        <div class="commu-add-file">
+          <input type="file" id="commu-add-file" name="commu-add-file" accept="image/*, .pdf, .doc">
+        </div>
         <div class="commu-add-all">추가하기</div>
+        <div class="commu-add-cancel">취소</div>
       </div>
     </div>
   </div>
@@ -119,7 +124,7 @@ import TheWelcome from './components/TheWelcome.vue'
   export default {
     methods:{
       AddPost(){
-
+        
       }
     }
   }
