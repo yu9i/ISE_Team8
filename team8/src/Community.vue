@@ -31,7 +31,7 @@
             <div class="comment-num">10</div>
           </div>
         </div>
-        <div v-for="post in posts" :key="post.id" class="post">
+        <div v-for="post in posts" :key="post.id" class="post" @click="ShowPostDetail(post)">
           <div id="post-title">{{post.title}}</div>
           <div class="post-content">
             <div id="post-pic"></div>
@@ -82,6 +82,34 @@
         </div>
       </div>
     </div>
+
+    <div class="post-detail" v-if="ShowPost">
+      <div class="post-detail-out">
+        <div class="xmark" @click="ShowPostDetailClose"><font-awesome-icon icon="fa-solid fa-xmark" style="color: #8f8f8f;" /></div>
+        <div class="post-detail-in">
+          <div class="post-detail-in-top">
+            <div class="post-detail-title">
+              <h1>{{selectedPost.title}}</h1>
+            </div>
+            <div class="post-detail-name">작성자: {{selectedPost.name}}</div>
+            <div class="post-detail-cont">
+              <p>{{selectedPost.content}}</p>
+            </div>
+          </div>
+          <div class="post-detail-likecomment">
+            <div class="likecomment">
+              <div class="like-icon"><font-awesome-icon icon="fa-regular fa-heart" size="lg"/></div>
+              <div class="like-num">{{selectedPost.good}}</div>
+              <div class="comment-icon"><font-awesome-icon icon="fa-regular fa-comment" size="lg"/></div>
+              <div class="comment-num">{{selectedPost.comment.length}}</div>
+            </div>
+            <div class="input-likecomment">
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   
 </template>
@@ -100,6 +128,7 @@
                 file: "",
             },
             posts: [], //post 목록
+            selectedPost: null, //선택된 post
         };
     },
 
@@ -142,6 +171,16 @@
         this.PostForm.file = "";
         this.contentLength = 0;
         this.ShowAddPost = false;
+      },
+
+      ShowPostDetail(post){
+        this.selectedPost = post;
+        this.ShowPost = true;
+      },
+
+      ShowPostDetailClose(){
+        this.ShowPost = false;
+        this.selectedPost = null;
       },
     }
   }
@@ -241,7 +280,7 @@
   text-overflow: ellipsis;
 }
 
-.main-posts > .post > .likecomment {
+.likecomment {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -250,7 +289,7 @@
   padding-right: 5px;
 }
 
-.main-posts > .post > .likecomment > div {
+.likecomment > div {
   width: 25px;
 }
 
@@ -390,4 +429,43 @@
   margin: 5px;
 }
 
+.post-detail {
+  display: block;
+}
+
+.post-detail > .post-detail-out {
+  position: fixed;
+  top: 15%;
+  left: 50%;
+  transform: translateX( -50% );
+  width: 60%;
+  background: white;
+  border: solid 1px black;
+  border-radius:10px;
+  padding: 1em;
+}
+
+.post-detail > .post-detail-out > .xmark {
+  cursor: pointer;
+  text-align: right;
+}
+
+.post-detail > .post-detail-out > .post-detail-in {
+  background: #ffdbe0;
+  border: solid 1px gray;
+  border-radius: 10px;
+  padding: 5px;
+}
+
+.post-detail > .post-detail-out > .post-detail-in > .post-detail-in-top {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.post-detail > .post-detail-out > .post-detail-in > .post-detail-in-top > div {
+  margin: 5px;
+}
 </style>
