@@ -1,8 +1,8 @@
 import './assets/css/main.css'
-// import App from './Community.vue';
+import App from './Community.vue';
 
 import { createApp } from 'vue';
-import App from './App.vue';
+// import App from './App.vue';
 
 // 설치했던 fontawesome-svg-core와 vue-fontawesome
 import { library } from "@fortawesome/fontawesome-svg-core";
