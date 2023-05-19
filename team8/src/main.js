@@ -1,5 +1,6 @@
 import { createApp } from 'vue';
 import App from './TeamBuilding.vue';
 import login from './login.vue';
+import mypage from './components/MyPage.vue'
 
-createApp(login).mount('#app');
+createApp(mypage).mount('#app');
