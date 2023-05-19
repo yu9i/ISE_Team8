@@ -4,7 +4,7 @@
 </script>
 
 <template>
-  <div class="main">
+  <div class="main" :style="{}">
     <div class="main-community">
       <div class="main-menu">
         <div class="main-menu-box">
@@ -24,61 +24,16 @@
             <div id="post-pic"></div>
             <div id="post-det">안녕하세요. 저는 소프트웨어학과 ㅁㅁ학번 학생 입니다. 곧, 중간보고서 제출 기간이어서 중간보고서를 작성하고 있는데 궁금한 점이 몇 개 있습니다. 보고서 양식을 보면 서명란이 있는데 교수님께 작접 서명을 안 받아도 되는 것이 맞나요? 그리고 제출할 때 파일 양식은 따로 정해져 있나요? 제출 양식 관련 내용이 안 적혀져 있어서 질문 드립니다.</div>
           </div>
-        </div>
-        <div class="post">
-          <div id="post-title">졸업 작품 관련 질문2</div>
-          <div class="post-content">
-            <div id="post-pic"></div>
-            <div id="post-det">안녕하세요. 저는 소프트웨어학과 ㅁㅁ학번 학생 입니다. 곧, 중간보고서 제출 기간이어서 중간보고서를 작성하고 있는데 궁금한 점이 몇 개 있습니다. 보고서 양식을 보면 서명란이 있는데 교수님께 작접 서명을 안 받아도 되는 것이 맞나요? 그리고 제출할 때 파일 양식은 따로 정해져 있나요? 제출 양식 관련 내용이 안 적혀져 있어서 질문 드립니다.</div>
+          <div class="likecomment">
+            <div class="like"></div>
+            <div class="comment"></div>
           </div>
         </div>
-        <div class="post">
-          <div id="post-title">졸업 작품 관련 질문3</div>
+        <div v-for="post in posts" :key="post.id" class="post">
+          <div id="post-title">{{post.title}}</div>
           <div class="post-content">
             <div id="post-pic"></div>
-            <div id="post-det">안녕하세요. 저는 소프트웨어학과 ㅁㅁ학번 학생 입니다. 곧, 중간보고서 제출 기간이어서 중간보고서를 작성하고 있는데 궁금한 점이 몇 개 있습니다. 보고서 양식을 보면 서명란이 있는데 교수님께 작접 서명을 안 받아도 되는 것이 맞나요? 그리고 제출할 때 파일 양식은 따로 정해져 있나요? 제출 양식 관련 내용이 안 적혀져 있어서 질문 드립니다.</div>
-          </div>
-        </div>
-        <div class="post">
-          <div id="post-title">졸업 작품 관련 질문4</div>
-          <div class="post-content">
-            <div id="post-pic"></div>
-            <div id="post-det">안녕하세요. 저는 소프트웨어학과 ㅁㅁ학번 학생 입니다. 곧, 중간보고서 제출 기간이어서 중간보고서를 작성하고 있는데 궁금한 점이 몇 개 있습니다. 보고서 양식을 보면 서명란이 있는데 교수님께 작접 서명을 안 받아도 되는 것이 맞나요? 그리고 제출할 때 파일 양식은 따로 정해져 있나요? 제출 양식 관련 내용이 안 적혀져 있어서 질문 드립니다.</div>
-          </div>
-        </div>
-        <div class="post">
-          <div id="post-title">졸업 작품 관련 질문4</div>
-          <div class="post-content">
-            <div id="post-pic"></div>
-            <div id="post-det">안녕하세요. 저는 소프트웨어학과 ㅁㅁ학번 학생 입니다. 곧, 중간보고서 제출 기간이어서 중간보고서를 작성하고 있는데 궁금한 점이 몇 개 있습니다. 보고서 양식을 보면 서명란이 있는데 교수님께 작접 서명을 안 받아도 되는 것이 맞나요? 그리고 제출할 때 파일 양식은 따로 정해져 있나요? 제출 양식 관련 내용이 안 적혀져 있어서 질문 드립니다.</div>
-          </div>
-        </div>
-        <div class="post">
-          <div id="post-title">졸업 작품 관련 질문4</div>
-          <div class="post-content">
-            <div id="post-pic"></div>
-            <div id="post-det">안녕하세요. 저는 소프트웨어학과 ㅁㅁ학번 학생 입니다. 곧, 중간보고서 제출 기간이어서 중간보고서를 작성하고 있는데 궁금한 점이 몇 개 있습니다. 보고서 양식을 보면 서명란이 있는데 교수님께 작접 서명을 안 받아도 되는 것이 맞나요? 그리고 제출할 때 파일 양식은 따로 정해져 있나요? 제출 양식 관련 내용이 안 적혀져 있어서 질문 드립니다.</div>
-          </div>
-        </div>
-        <div class="post">
-          <div id="post-title">졸업 작품 관련 질문4</div>
-          <div class="post-content">
-            <div id="post-pic"></div>
-            <div id="post-det">안녕하세요. 저는 소프트웨어학과 ㅁㅁ학번 학생 입니다. 곧, 중간보고서 제출 기간이어서 중간보고서를 작성하고 있는데 궁금한 점이 몇 개 있습니다. 보고서 양식을 보면 서명란이 있는데 교수님께 작접 서명을 안 받아도 되는 것이 맞나요? 그리고 제출할 때 파일 양식은 따로 정해져 있나요? 제출 양식 관련 내용이 안 적혀져 있어서 질문 드립니다.</div>
-          </div>
-        </div>
-        <div class="post">
-          <div id="post-title">졸업 작품 관련 질문4</div>
-          <div class="post-content">
-            <div id="post-pic"></div>
-            <div id="post-det">안녕하세요. 저는 소프트웨어학과 ㅁㅁ학번 학생 입니다. 곧, 중간보고서 제출 기간이어서 중간보고서를 작성하고 있는데 궁금한 점이 몇 개 있습니다. 보고서 양식을 보면 서명란이 있는데 교수님께 작접 서명을 안 받아도 되는 것이 맞나요? 그리고 제출할 때 파일 양식은 따로 정해져 있나요? 제출 양식 관련 내용이 안 적혀져 있어서 질문 드립니다.</div>
-          </div>
-        </div>
-        <div class="post">
-          <div id="post-title">졸업 작품 관련 질문4</div>
-          <div class="post-content">
-            <div id="post-pic"></div>
-            <div id="post-det">안녕하세요. 저는 소프트웨어학과 ㅁㅁ학번 학생 입니다. 곧, 중간보고서 제출 기간이어서 중간보고서를 작성하고 있는데 궁금한 점이 몇 개 있습니다. 보고서 양식을 보면 서명란이 있는데 교수님께 작접 서명을 안 받아도 되는 것이 맞나요? 그리고 제출할 때 파일 양식은 따로 정해져 있나요? 제출 양식 관련 내용이 안 적혀져 있어서 질문 드립니다.</div>
+            <div id="post-det">{{post.content}}</div>
           </div>
         </div>
       </div>
@@ -97,23 +52,26 @@
           </div>
           <div class="page-profile-bottom" Onclick="">내 프로필 보러가기</div>
         </div>
-        <div class="main-add-postb" @click="AddPost()"><font-awesome-icon icon="fa-solid fa-square-plus" size="3x"/></div>
+        <div class="main-add-postb" @click="AddPost = true"><font-awesome-icon icon="fa-solid fa-square-plus" size="3x"/></div>
       </div>
     </div>
 
-    <div class="commu-add-post">
+    <div class="commu-add-post" v-if="AddPost">
       <div class="commu-add-new">
         <div class="commu-add-title">
-          <input type="text" id="commu-add-title" name="commu-add-title" required minlength="2" maxlength="15" placeholder="제목을 입력하세요">
+          <input type="text" id="commu-add-title" v-model="PostForm.title" required minlength="2" @input="PostLimitText" placeholder="제목을 입력하세요">
         </div>
         <div class="commu-add-cont">
-          <textarea id="comm-add-cont" name="commu-add-cont" placeholder="내용을 입력해주세요" required rows="20" cols="60" ></textarea>
+          <textarea id="comm-add-cont" v-model="PostForm.content" placeholder="내용을 입력해주세요" required rows="20" cols="60"  @input="PostLimitText"></textarea>
+          <div class="commu-word-count">{{contentLength}}/500자</div>
         </div>
         <div class="commu-add-file">
-          <input type="file" id="commu-add-file" name="commu-add-file" accept="image/*, .pdf, .doc">
+          <input type="file" id="commu-add-file" accept="image/*, .pdf, .doc">
         </div>
-        <div class="commu-add-all">추가하기</div>
-        <div class="commu-add-cancel" @click="CancelPost()">취소</div>
+        <div class="commu-add-ornot">
+          <div class="commu-add-cancel" @click="CancelPost">취소</div>
+          <div class="commu-add-all" @click="PostAll">추가하기</div>
+        </div>
       </div>
     </div>
   </div>
@@ -122,14 +80,65 @@
 
 <script>
   export default {
+    data() {
+        return {
+            AddPost: false,
+            ShowPost: false,
+            titleLength: 0,
+            contentLength: 0,
+            PostForm: {
+                title: "",
+                content: "",
+                file: "",
+            },
+            posts: [], //post 목록
+        };
+    },
+
     methods:{
+      PostLimitText() {
+        this.titleLength = this.PostForm.title.length;
+        this.contentLength = this.PostForm.content.length;
+        if (this.titleLength > 15) {
+          alert('제목은 2자 이상, 15자 이하로 작성해주세요.');
+        }
+        if (this.contentLength > 500) {
+          alert('내용은 2자 이상, 500자 이하로 작성해주세요.');
+        }
+      },
+
       AddPost(){
         // this.style.display = "block";
       },
 
-      CancelPost(){
+      PostAll(){
+        this.titleLength = this.PostForm.title.length;
+        this.contentLength = this.PostForm.content.length;
+        if(this.titleLength < 2 || this.contentLength < 2){
+          alert("제목과 내용은 2자 이상으로 작성해주세요.");
+          return;
+        }
 
-      }
+        const post = {
+          id: this.posts.length + 1,
+          name: "name",
+          title: this.PostForm.title,
+          content: this.PostForm.content,
+          good: 0,
+          comment: [],
+        };
+        this.posts.push(post);
+
+        this.CancelPost();
+      },
+
+      CancelPost(){
+        this.PostForm.title = "";
+        this.PostForm.content = "";
+        this.PostForm.file = "";
+        this.contentLength = 0;
+        this.AddPost = false;
+      },
     }
   }
 </script>
@@ -186,7 +195,7 @@
   max-height: 750px;
   margin-bottom: 3em;
   padding-bottom: 2em;
-  overflow: scroll;
+  overflow-y: scroll;
 }
 
 .main-posts > #page-name {
@@ -228,14 +237,13 @@
   text-overflow: ellipsis;
 }
 
-.main-page { /*absolute*/
+.main-page {
   width: 100%;
   align-content: center;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  /* margin-top: 5em; */
   padding: 0 1em;
 }
 
@@ -293,7 +301,7 @@
 }
 
 .commu-add-post {
-  display: none;
+  display: block;
 }
 
 .commu-add-new {
@@ -329,15 +337,32 @@
   font-weight: bold;
 }
 
-.commu-add-new > .commu-add-cont{
-  
+.commu-add-new > .commu-add-cont > .commu-word-count{
+  text-align: right;
 }
 
 .commu-add-new > .commu-add-file{
   
 }
 
-.commu-add-new > .commu-add-all{
+.commu-add-ornot {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.commu-add-new > .commu-add-ornot > .commu-add-cancel{
+  color:#a8a8a8;
+  border: solid 2px #a4a4a4;
+  border-radius: 10px;
+  padding: 0.2em 1em;
+  font-size: 1em;
+  cursor: pointer;
+  margin: 5px;
+}
+
+.commu-add-new > .commu-add-ornot > .commu-add-all{
   background: #9ef686;
   border: solid 2px #92d035;
   border-radius: 10px;
@@ -345,14 +370,7 @@
   font-size: 1.2em;
   font-weight: bold;
   cursor: pointer;
-}
-
-.commu-add-new > .commu-add-cancel{
-  color:#a8a8a8;
-  border: solid 1px #a4a4a4;
-  padding: 2px 1em;
-  border-radius: 10px;
-  cursor: pointer;
+  margin: 5px;
 }
 
 </style>
