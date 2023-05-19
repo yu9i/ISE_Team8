@@ -1,7 +1,7 @@
 import './assets/main.css'
 
 import { createApp } from 'vue';
-import App from './TeamBuilding.vue';
+import App from './Community.vue';
 import login from './login.vue';
 import mypage from './components/MyPage.vue'
 
