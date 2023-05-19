@@ -1,5 +1,6 @@
 <template>
-    <div id="login">
+    <div>
+        <div id="login">
         <h1>로그인</h1>
         <div class="form-inputs">
             <label for="username">아이디</label>
@@ -9,7 +10,7 @@
             <label for="password">비밀번호</label>
             <input type="password" id="password" name="password" v-model="input.password" placeholder="비밀번호" />
         </div>
-        <button id = "login" type="button" v-on:click="login()">로그인</button>
+        <button id = "loginbtn" type="button" v-on:click="login()">로그인</button>
     </div>
 
     <div id="register">
@@ -26,8 +27,10 @@
             <label for="registerpwcheck">비밀번호 확인</label>
             <input type="password" id="registerpwcheck" name="registerpwcheck" v-model="input.registerpwcheck" placeholder="비밀번호 확인" />
         </div>
-        <button id ="register" type="button" v-on:click="register()">회원가입</button>
+        <button id ="registerbtn" type="button" v-on:click="register()">회원가입</button>
     </div>
+    </div>
+    
 
 </template>
 
@@ -72,10 +75,13 @@
 <style>
 
 #login .form-inputs {
+    text-align: center;
     padding-bottom: 10px;
 }
 
 #login{
+    width: 50%;
+    float:left;
     text-align: center;
 }
 
@@ -84,6 +90,8 @@
 }
 
 #register{
+    width: 50%;
+    float: right;
     text-align: center;
 }
 
