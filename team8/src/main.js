@@ -1,8 +1,9 @@
 import './assets/main.css'
-// import App from './TeamBuilding.vue';
-import App from './Community.vue';
 
 import { createApp } from 'vue';
+import App from './TeamBuilding.vue';
+import login from './login.vue';
+import mypage from './components/MyPage.vue'
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";

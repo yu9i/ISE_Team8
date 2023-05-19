@@ -1,120 +1,140 @@
 <template>
   <div class="page-container" :style="{}">
+    <div class = "page-content">
       <div class="main-content">
-        <button @click="showModal = true" class="recruit-button">모집하기</button>
+        <div class = "left-content">
+          <button @click="showModal = true" class="recruit-button">모집하기</button>
 
-        <!-- Recruit 글 작성 모달 -->
-      <div class="modal-overlay" v-if="showModal">
-        <div class="modal">
-          <div class="modal-content">
-            <span class="close" @click="resetRecruit">&times;</span>
-            <h3 class="modal-title">Recruit Form 작성</h3>
-            <div class="input-group">
-              <label for="title-input">제목</label>
-              <input type="text" id="title-input" v-model="recruitForm.title" placeholder="제목">
-            </div>
-            <div class="input-group">
-              <label for="content-input">내용</label>
-              <textarea id="content-input" v-model="recruitForm.content" placeholder="내용" :style="{height: textareaHeight}" @input="limitText"></textarea>
-              <div class="word-count">{{ contentLength }}/100자</div>
-            </div>
-            <div class="input-group">
-              <label for="recruitment-input">모집인원</label>
-              <input type="number" id="recruitment-input" v-model="recruitForm.recruitment" placeholder="모집 인원" min="0">
-            </div>
-            <div class="input-group">
-              <label for="password-input">비밀번호 입력 (신청한 인원을 확인할 때 사용됩니다.)</label>
-              <input type="password" id="password-input" v-model="recruitForm.password" placeholder="비밀번호 (4자리 숫자)">
-            </div>
-            <div class="button-container">
-              <button @click="postRecruit" class="modal-button">게시</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="section">
-        <h2 class="section-title">팀 신청하기</h2>
-        <div v-for="post in posts" :key="post.id" class="post">
-          <div class="team-info">
-          <h3 class="team-title">{{ post.title }}</h3>
-          <p class="team-content">{{ post.content }}</p>
-          <p class="team-recruitment">모집 인원: {{ post.recruitment }}</p>
-          <button v-if="!isRecruitmentClosed(post)" @click="applyTeam(post)">신청</button>
-          <p class="recruit-done" v-if="isRecruitmentClosed(post)">마감!</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="section">
-        <h2 class="section-title">팀원 승인하기</h2>
-        <div v-for="team in teams" :key="team.id" class="request">
-          <div class="approve-info">
-          <h3>{{ team.title }}</h3>
-          <button @click="openModal(team)">확인</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 승인/거절 모달창 -->
-    <div class="modal-overlay" v-if="showRequestModal">
-      <div class="modal">
-      <div class="modal-content">
-        <span class="close" @click="showRequestModal = false">&times;</span>
-        <h3 class="modal-title">{{ selectedTeam.title }}</h3>
-        <table class="member-requests-table" style="width:100%;">
-          <colgroup>
-            <col style="width: 20%;">
-            <col style="width: 40%;">
-            <col style="width: 20%;">
-          </colgroup>
-          <thead>
-            <tr>
-              <th>신청인</th>
-              <th>내용</th>
-              <th>승인/거절</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="request in selectedTeam.requests" :key="request.id">
-              <td>{{ request.userName }}</td>
-              <td>{{ request.message }}</td>
-              <td>
-                <!-- 승인/거절 버튼을 일렬로 표시 -->
-                <div class="button-container">
-                  <button v-if="!request.approved && !request.rejected" @click="approveRequest(selectedTeam, request)" class="request-button">승인</button>
-                  <button v-if="!request.approved && !request.rejected" @click="rejectRequest(selectedTeam, request)" class="request-button">거절</button>
-                  <p v-if="request.approved" class="request-status">승인되었습니다!</p>
-                  <p v-if="request.rejected" class="request-status">거절되었습니다.</p>
+            <!-- Recruit 글 작성 모달 -->
+          <div class="modal-overlay" v-if="showModal">
+            <div class="modal">
+              <div class="modal-content">
+                <span class="close" @click="resetRecruit">&times;</span>
+                <h3 class="modal-title">Recruit Form 작성</h3>
+                <div class="input-group">
+                  <label for="title-input">제목</label>
+                  <input type="text" id="title-input" v-model="recruitForm.title" placeholder="제목">
                 </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <p v-if="!isRecruitmentClosed(selectedTeam)" class="recruitment-status">
-          {{ '(승인된 인원) ' + getApprovedCount(selectedTeam) + ' / (모집인원) ' + selectedTeam.recruitment }}
-        </p>
-        <p v-else class="recruitment-status">모집이 마감되었습니다.</p>
-      </div>
-      </div>
-    </div>
+                <div class="input-group">
+                  <label for="content-input">내용</label>
+                  <textarea id="content-input" v-model="recruitForm.content" placeholder="내용" :style="{height: textareaHeight}" @input="limitText"></textarea>
+                  <div class="word-count">{{ contentLength }}/100자</div>
+                </div>
+                <div class="input-group">
+                  <label for="recruitment-input">모집인원</label>
+                  <input type="number" id="recruitment-input" v-model="recruitForm.recruitment" placeholder="모집 인원" min="0">
+                </div>
+                <div class="input-group">
+                  <label for="password-input">비밀번호 입력 (신청한 인원을 확인할 때 사용됩니다.)</label>
+                  <input type="password" id="password-input" v-model="recruitForm.password" placeholder="비밀번호 (4자리 숫자)">
+                </div>
+                <div class="button-container">
+                  <button @click="postRecruit" class="modal-button">게시</button>
+                </div>
+              </div>
+            </div>
+          </div>
 
-    <div class="modal-overlay" v-if="showPasswordModal">
-      <div class="modal">
-      <div class="modal-content">
-        <span class="close" @click="closePasswordModal">&times;</span>
-        <h3 class="modal-title">비밀번호 확인</h3>
-        <div class="input-group">
-        <input type="password" v-model="passwordInput" placeholder="비밀번호를 입력하세요" class="password-input">
+          <div class="section">
+            <h2 class="section-title">팀원 승인하기</h2>
+            <div v-for="team in teams" :key="team.id" class="request">
+              <div class="approve-info">
+                <h3>{{ team.title }}</h3>
+                <button @click="openModal(team)">확인</button>
+              </div>
+            </div>
+          </div>
+
+        <!-- 승인/거절 모달창 -->
+        <div class="modal-overlay" v-if="showRequestModal">
+          <div class="modal">
+          <div class="modal-content">
+            <span class="close" @click="showRequestModal = false">&times;</span>
+            <h3 class="modal-title">{{ selectedTeam.title }}</h3>
+            <table class="member-requests-table" style="width:100%;">
+              <colgroup>
+                <col style="width: 20%;">
+                <col style="width: 40%;">
+                <col style="width: 20%;">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>신청인</th>
+                  <th>내용</th>
+                  <th>승인/거절</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="request in selectedTeam.requests" :key="request.id">
+                  <td>{{ request.userName }}</td>
+                  <td>{{ request.message }}</td>
+                  <td>
+                    <!-- 승인/거절 버튼을 일렬로 표시 -->
+                    <div class="button-container">
+                      <button v-if="!request.approved && !request.rejected" @click="approveRequest(selectedTeam, request)" class="request-button">승인</button>
+                      <button v-if="!request.approved && !request.rejected" @click="rejectRequest(selectedTeam, request)" class="request-button">거절</button>
+                      <p v-if="request.approved" class="request-status">승인되었습니다!</p>
+                      <p v-if="request.rejected" class="request-status">거절되었습니다.</p>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <p v-if="!isRecruitmentClosed(selectedTeam)" class="recruitment-status">
+              {{ '(승인된 인원) ' + getApprovedCount(selectedTeam) + ' / (모집인원) ' + selectedTeam.recruitment }}
+            </p>
+            <p v-else class="recruitment-status">모집이 마감되었습니다.</p>
+          </div>
+          </div>
         </div>
-        <div class="button-container">
-        <button @click="confirmPassword(selectedTeam)" class="modal-button">확인</button>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title">팀 신청하기</h2>
+          <div v-for="post in posts" :key="post.id" class="post">
+            <div class="team-info">
+            <h3 class="team-title">{{ post.title }}</h3>
+            <p class="team-content">{{ post.content }}</p>
+            <p class="team-recruitment">모집 인원: {{ post.recruitment }}</p>
+            <button v-if="!isRecruitmentClosed(post)" @click="applyTeam(post)">신청</button>
+            <p class="recruit-done" v-if="isRecruitmentClosed(post)">마감!</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-overlay" v-if="showPasswordModal">
+          <div class="modal">
+            <div class="modal-content">
+              <span class="close" @click="closePasswordModal">&times;</span>
+              <h3 class="modal-title">비밀번호 확인</h3>
+                <div class="input-group">
+                  <input type="password" v-model="passwordInput" placeholder="비밀번호를 입력하세요" class="password-input">
+                </div>
+                <div class="button-container">
+                  <button @click="confirmPassword(selectedTeam)" class="modal-button">확인</button>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="main-page">
+        <div class="page-home" Onclick="">Home</div>
+        <div class="page-team" Onclick="">Team</div>
+        <div class="page-profile">
+          <div class="page-profile-top">
+            <div id="page-profile-pic"></div>
+            <div id="page-profile-name">이름</div>
+          </div>
+          <div class="page-profile-mid">
+            <div id="page-profile-dep">소프트웨어학과</div>
+            <div id="page-profile-grad">2025년 2월 졸업 예정</div>
+          </div>
+          <div class="page-profile-bottom" Onclick="">내 프로필 보러가기</div>
         </div>
       </div>
     </div>
-    </div>
-    </div>
+  </div>
 </template>
 
 <script>
@@ -289,28 +309,15 @@ body {
   overflow-x: hidden;
 }
 
-.page-title {
-  background-color: #4E4E4ECC;
-  color: #fff;
-  height: 3rem;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem;
-  font-weight: bold;
-  font-size: 1.2rem;
+.page-content{
+  display: grid;
+  grid-template-columns: 4fr 1fr;
 }
-
-.page-title span {
-  margin-right: 2rem;
-}
-
 .main-content {
   background-color: #ffffff;
   padding: 1rem;
   display: grid; 
-  grid-template-columns: 0.5fr 2fr 1fr; 
+  grid-template-columns: 1fr 2fr; 
   gap: 3rem;
 }
 
@@ -606,4 +613,69 @@ button:hover {
 .member-request {
   margin-bottom: 1rem;
 }
+
+.main-page { /*absolute*/
+  width: 80%;
+  align-content: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  /* margin-top: 5em; */
+  padding: 0 1em;
+}
+
+.main-page > div {
+  font-size: 1.1em;
+  margin: 1em;
+}
+
+.main-page > .page-home, .main-page >.page-team {
+  cursor: pointer;
+}
+
+.main-page > .page-home:hover, .main-page >.page-team:hover {
+  font-weight: bold;
+}
+
+.main-page > .page-profile {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+  border: solid 1px black;
+  border-radius: 10px;
+  align-items: center;
+  padding: 5px;
+}
+
+.main-page > .page-profile > div {
+  margin: 7px;
+}
+
+.main-page > .page-profile > .page-profile-top > #page-profile-name {
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.main-page > .page-profile > .page-profile-mid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.main-page > .page-profile > .page-profile-bottom {
+  color: #a4a4a4;
+}
+
+.main-page > .page-profile >.page-profile-bottom:hover {
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.main-page > .main-add-postb:hover {
+  cursor: pointer;
+}
+
 </style>
