@@ -53,6 +53,7 @@
                 if(this.input.username != "" && this.input.password != "") {
                     if(this.input.username == "1234" && this.input.password == "1q2w3e4r!") {
                         //로그인 성공
+                        this.$router.push('community');
                         console.log("로그인 성공");
                     } else {
                         console.log("아이디 혹은 비밀번호 오류");
