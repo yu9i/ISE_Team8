@@ -1,12 +1,30 @@
 @import './base.css';
 
 #app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-
-  font-weight: normal;
+  /* max-width: 1280px; */
+  width: 100%;
+  align-items: center;
 }
+
+header {
+  background: #4E4E4E;
+  opacity: 0.8;
+  color: white;
+  margin-bottom: 1em;
+  padding: 1.2rem 2.5rem;
+  font-weight: bold;
+}
+
+header > .header-const {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+
+/*******************************************************************************/
 
 a,
 .green {
@@ -22,14 +40,11 @@ a,
 }
 
 @media (min-width: 1024px) {
-  body {
+  body > .main{
     display: flex;
     place-items: center;
   }
 
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
+  /* #app {
+  } */
 }
