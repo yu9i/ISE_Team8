@@ -1,5 +1,5 @@
-import './assets/css/main.css'
-import App from './Community.vue';
+import './assets/main.css'
+import App from './TeamBuilding.vue';
 
 import { createApp } from 'vue';
 // import App from './App.vue';
