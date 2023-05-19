@@ -455,6 +455,7 @@
   border: solid 1px gray;
   border-radius: 10px;
   padding: 5px;
+  overflow-y: scroll;
 }
 
 .post-detail > .post-detail-out > .post-detail-in > .post-detail-in-top {
@@ -465,7 +466,12 @@
   justify-content: flex-start;
 }
 
-.post-detail > .post-detail-out > .post-detail-in > .post-detail-in-top > div {
-  margin: 5px;
+.post-detail-cont {
+  margin: 1em;
+  width: 80%;
+}
+
+.input-likecomment {
+  background: white;
 }
 </style>
