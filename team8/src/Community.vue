@@ -98,10 +98,14 @@
           </div>
           <div class="post-detail-likecomment">
             <div class="likecomment">
-              <div class="like-icon"><font-awesome-icon icon="fa-regular fa-heart" size="lg"/></div>
+              <div class="like-icon">
+                <font-awesome-icon icon="fa-regular fa-heart" size="lg" v-if="!likeit" @click="likeit=!likeit; selectedPost.like++;"/>
+                <font-awesome-icon icon="fa-solid fa-heart" size="lg" v-if="likeit" @click="likeit=!likeit; selectedPost.like--;"/>
+              </div>
               <div class="like-num">{{selectedPost.good}}</div>
               <div class="comment-icon"><font-awesome-icon icon="fa-regular fa-comment" size="lg"/></div>
               <div class="comment-num">{{selectedPost.comment.length}}</div>
+              
             </div>
             <div class="input-likecomment">
               <div><h3>댓글</h3></div>
@@ -145,7 +149,8 @@
             CommentForm: {
               name: "name",
               comment: "",
-            }
+            },
+            likeit: false,
         };
     },
 
@@ -181,7 +186,7 @@
           comment: this.CommentForm.name,
         }
         this.selectedPost.comment.push(com);
-        console.log(selectedPost.comment);
+        // console.log(selectedPost.comment);
       },
 
       PostAll(){
