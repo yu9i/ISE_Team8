@@ -88,18 +88,18 @@
         </div>
         </div>
 
-        <div class="section">
-          <h2 class="section-title">팀 신청하기</h2>
-          <div v-for="post in posts" :key="post.id" class="post">
-            <div class="team-info">
-            <h3 class="team-title">{{ post.title }}</h3>
-            <p class="team-content">{{ post.content }}</p>
-            <p class="team-recruitment">모집 인원: {{ post.recruitment }}</p>
-            <button v-if="!isRecruitmentClosed(post)" @click="applyTeam(post)">신청</button>
-            <p class="recruit-done" v-if="isRecruitmentClosed(post)">마감!</p>
+          <div class="section">
+            <h2 class="section-title">팀 신청하기</h2>
+            <div v-for="post in posts" :key="post.id" class="post">
+              <div class="team-info">
+              <h3 class="team-title">{{ post.title }}</h3>
+              <p class="team-content">{{ post.content }}</p>
+              <p class="team-recruitment">모집 인원: {{ post.recruitment }}</p>
+              <button v-if="!isRecruitmentClosed(post)" @click="applyTeam(post)">신청</button>
+              <p class="recruit-done" v-if="isRecruitmentClosed(post)">마감!</p>
+              </div>
             </div>
           </div>
-        </div>
 
         <div class="modal-overlay" v-if="showPasswordModal">
           <div class="modal">
@@ -132,6 +132,53 @@
           <div class="page-profile-bottom" @click="goToMyPage">내 프로필 보러가기</div>
           <div class="page-profile-bottom" @click="Logout">로그아웃 하기</div>
         </div>
+
+        <div class="section">
+          <h2 class="section-title">지원현황 확인하기</h2>
+          <div v-for="team in teams" :key="team.id" class="request">
+            <div class="approve-info">
+              <h3>{{ team.title }}</h3>
+              <button @click="openStatusModal(team)">확인</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 승인/거절 모달창 -->
+        <div class="modal-overlay" v-if="showStatusModal">
+          <div class="modal">
+          <div class="modal-content">
+            <span class="close" @click="showStatusModal = false">&times;</span>
+            <h3 class="modal-title">{{ selectedTeam.title }}</h3>
+            <table class="member-requests-table" style="width:100%;">
+              <colgroup>
+                <col style="width: 20%;">
+                <col style="width: 40%;">
+                <col style="width: 20%;">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>신청인</th>
+                  <th>내용</th>
+                  <th>지원 현황</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="request in selectedTeam.requests" :key="request.id">
+                  <td>{{ request.userName }}</td>
+                  <td>{{ request.message }}</td>
+                  <td>
+                    <!-- 승인/거절 버튼을 일렬로 표시 -->
+                    <div class="button-container">
+                      <p v-if="request.approved" class="request-status">승인되었습니다!</p>
+                      <p v-if="request.rejected" class="request-status">거절되었습니다.</p>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          </div>
+        </div>
       </div>
     </div>
 </template>
@@ -146,6 +193,7 @@ export default {
       textareaHeight: 'auto',
       showModal: false,
       showRequestModal: false,
+      showStatusModal: false,
       showPasswordModal: false,
       recruitForm: {
         title: "",
@@ -155,6 +203,7 @@ export default {
       },
       posts: [], // Recruit 글 목록
       teams: [], // 팀 목록
+      appliedUsers: [],
       selectedTeam: null, // 선택된 팀
       passwordInput: '',
     };
@@ -238,11 +287,15 @@ export default {
         return;
       }
       
-      console.log(approvedRequestsCount)
-      console.log(post.recruitment)
+      const username = localStorage.getItem("username");
+      console.log(username)
+      if (this.appliedUsers.includes(username)) {
+        alert("이미 신청하셨습니다!");
+        return;
+      }
 
       const newRequest = {
-        userName: '신청한 사용자 이름',
+        userName: localStorage.getItem("username"),
         message: '신청 메시지',
         approved: false,
       };
@@ -258,6 +311,7 @@ export default {
           requests: [newRequest],
         };
         this.teams.push(team);
+        this.appliedUsers.push(username);
       }
     },
     approveRequest(team, request) {
@@ -281,6 +335,15 @@ export default {
     closeModal() {
       this.selectedTeam = null;
       this.showRequestModal = false;
+    },
+    openStatusModal(team){
+      console.log("hi")
+      this.selectedTeam = team;
+      this.showStatusModal = true;
+    },
+    closeStatusModal() {
+      this.selectedTeam = null;
+      this.showStatusModal = false;
     },
     closePasswordModal() {
       this.showPasswordModal = false;
@@ -339,6 +402,7 @@ body {
   text-align: center;
   flex: 1;
   margin-top: 0.1em; 
+  width:100%;
 }
 
 .section:nth-child(1) {
