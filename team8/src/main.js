@@ -1,9 +1,10 @@
 import './assets/main.css'
 
 import { createApp } from 'vue';
-import App from './TeamBuilding.vue';
+import teambuilding from './components/TeamBuilding.vue';
 import login from './login.vue';
 import mypage from './components/MyPage.vue'
+import community from './components/Community.vue'
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -13,5 +14,5 @@ import { far } from "@fortawesome/free-regular-svg-icons";
 
 library.add(fas, far); 
 
-createApp(App).component('font-awesome-icon', FontAwesomeIcon)
+createApp(login).component('font-awesome-icon', FontAwesomeIcon)
 .mount('#app');
