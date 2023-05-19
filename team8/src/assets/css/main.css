@@ -179,7 +179,7 @@ header > .header-const {
 }
 
 .commu-add-post {
-  display: block;
+  display: none;
 }
 
 .commu-add-new {

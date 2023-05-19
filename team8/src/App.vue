@@ -113,7 +113,7 @@
           <input type="file" id="commu-add-file" name="commu-add-file" accept="image/*, .pdf, .doc">
         </div>
         <div class="commu-add-all">추가하기</div>
-        <div class="commu-add-cancel">취소</div>
+        <div class="commu-add-cancel" @click="CancelPost()">취소</div>
       </div>
     </div>
   </div>
@@ -124,7 +124,11 @@
   export default {
     methods:{
       AddPost(){
-        
+        // this.style.display = "block";
+      },
+
+      CancelPost(){
+
       }
     }
   }
