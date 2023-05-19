@@ -14,20 +14,20 @@
         <h2>마이페이지</h2>
         <table id = "information">
             <tr>
-                <td class="category">닉네임</td>
-                <td>이름1</td>
+                <td class="category">이름</td>
+                <td><input type="text" id="name" value="홍길동"></td>
             </tr>
             <tr>
                 <td>학과</td>
-                <td>소프트웨어학과</td>
+                <td><input type="text" id="department" value="솦트"></td>
             </tr>
             <tr>
                 <td class="category">학번</td>
-                <td>20학번</td>
+                <td><input type="text" id="number" value="209394841"></td>
             </tr>
             <tr>
                 <td class="category">졸업예정</td>
-                <td>2025년 2월</td>
+                <td><input type="date" id="date" value="date"></td>
             </tr>
             <tr>
                 <td class="category">3품</td>
@@ -44,7 +44,9 @@
                     <label for="인턴십">인턴십</label>
                 </td>
             </tr>
-        </table><br>
+        </table>
+        <button type= "button" class="save" @click="save">저장하기</button>
+        <br>
         <div>사용 기록</div>
         <div class="main-posts">
         <div class="post">
@@ -174,8 +176,13 @@
       },
       Logout(){
         this.$router.push('/');
+      },
+      save(){
+        localStorage.setItem("name",document.getElementById("name").value);
+        localStorage.setItem("department",document.getElementById("department").value);
+        localStorage.setItem("number",document.getElementById("number").value);
+        localStorage.setItem("date",document.getElementById("date").value);
       }
-
     }
   }
 </script>
