@@ -51,6 +51,7 @@
             <div id="page-profile-grad">2025년 2월 졸업 예정</div>
           </div>
           <div class="page-profile-bottom" @click="goToMyPage">내 프로필 보러가기</div>
+          <div class="page-profile-bottom" @click="Logout">로그아웃 하기</div>
         </div>
         <div class="main-add-postb" @click="ShowAddPost = true"><font-awesome-icon icon="fa-solid fa-square-plus" size="3x"/></div>
       </div>
@@ -133,11 +134,12 @@
       },
 
       CancelPost(){
+        this.ShowAddPost=false;
+        this.AddPost = false;
         this.PostForm.title = "";
         this.PostForm.content = "";
         this.PostForm.file = "";
         this.contentLength = 0;
-        this.AddPost = false;
       },
       goToMainPage() {
         this.$router.push('/community');
@@ -148,6 +150,9 @@
       goToMyPage() {
         this.$router.push('/mypage');
       },
+      Logout(){
+        this.$router.push('/');
+      }
 
     }
   }

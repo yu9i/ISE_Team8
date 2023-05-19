@@ -6,6 +6,8 @@ import TeamBuilding from './components/TeamBuilding.vue';
 import Login from './login.vue';
 
 const routes = [
+    
+    { path: '/', component:Login},
     { path: '/community', component:Community},
     { path: '/mypage', component:MyPage},
     { path: '/teambuilding', component:TeamBuilding}
