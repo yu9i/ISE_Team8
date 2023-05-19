@@ -39,8 +39,8 @@
       </div>
 
       <div class="main-page">
-        <div class="page-home" Onclick="">Home</div>
-        <div class="page-team" Onclick="">Team</div>
+        <div class="page-home" @click="goToMainPage">Home</div>
+        <div class="page-team" @click="goToTeamPage">Team</div>
         <div class="page-profile">
           <div class="page-profile-top">
             <div id="page-profile-pic"></div>
@@ -50,7 +50,7 @@
             <div id="page-profile-dep">소프트웨어학과</div>
             <div id="page-profile-grad">2025년 2월 졸업 예정</div>
           </div>
-          <div class="page-profile-bottom" Onclick="">내 프로필 보러가기</div>
+          <div class="page-profile-bottom" @click="goToMyPage">내 프로필 보러가기</div>
         </div>
         <div class="main-add-postb" @click="ShowAddPost = true"><font-awesome-icon icon="fa-solid fa-square-plus" size="3x"/></div>
       </div>
@@ -139,6 +139,16 @@
         this.contentLength = 0;
         this.AddPost = false;
       },
+      goToMainPage() {
+        this.$router.push('/community');
+      },
+      goToTeamPage() {
+        this.$router.push('/teambuilding');
+      },
+      goToMyPage() {
+        this.$router.push('/mypage');
+      },
+
     }
   }
 </script>
