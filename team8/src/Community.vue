@@ -104,7 +104,19 @@
               <div class="comment-num">{{selectedPost.comment.length}}</div>
             </div>
             <div class="input-likecomment">
-              
+              <div><h3>댓글</h3></div>
+              <div class="show-comment">
+                <div class="show-comment-name">name: </div>
+                <div class="show-comment-cont">comment content</div>
+              </div>
+              <div v-for="comment in selectedPost.comment" :key="comment.id" class="show-comment" >
+                <div class="show-comment-name">{{comment.name}}</div>
+                <div class="show-comment-cont">{{comment.comment}}</div>
+              </div>
+              <div class="input-comment">
+                <div><input type="text" id="commu-add-title" v-model="CommentForm.title" required minlength="2" @input="CommentLimitText" placeholder="댓글을 입력하세요"></div>
+                <div class="input-comment-all" @onclick="PostComment">등록</div>
+              </div>
             </div>
           </div>
         </div>
@@ -129,6 +141,11 @@
             },
             posts: [], //post 목록
             selectedPost: null, //선택된 post
+            commentLength: 0,
+            CommentForm: {
+              name: "name",
+              comment: "",
+            }
         };
     },
 
@@ -142,6 +159,29 @@
         if (this.contentLength > 500) {
           alert('내용은 2자 이상, 500자 이하로 작성해주세요.');
         }
+      },
+
+      CommentLimitText(){
+        this.commentLength = this.CommentForm.comment.length;
+        if (this.titleLength > 30) {
+          alert('댓글은 2자 이상, 30자 이하로 작성해주세요.');
+        }
+      },
+
+      PostComment(){
+        this.commentLength = this.CommentForm.comment.length;
+        if(this.commentLength < 2){
+          alert("댓글은 2자 이상으로 작성해주세요.");
+          return;
+        }
+        
+        const com = {
+          id: this.selectedPost.comment.length+1,
+          name: this.CommentForm.name,
+          comment: this.CommentForm.name,
+        }
+        this.selectedPost.comment.push(com);
+        console.log(selectedPost.comment);
       },
 
       PostAll(){
@@ -443,6 +483,8 @@
   border: solid 1px black;
   border-radius:10px;
   padding: 1em;
+  max-height: 550px;
+
 }
 
 .post-detail > .post-detail-out > .xmark {
@@ -455,7 +497,8 @@
   border: solid 1px gray;
   border-radius: 10px;
   padding: 5px;
-  overflow-y: scroll;
+  overflow-y: auto;
+  max-height: 500px;
 }
 
 .post-detail > .post-detail-out > .post-detail-in > .post-detail-in-top {
@@ -473,5 +516,47 @@
 
 .input-likecomment {
   background: white;
+  width: 90%;
+  left: 50%;
+  transform: translateX( -50% );
+  margin: 1em 0;
+  padding: 0.5em 1em;
+}
+
+.input-likecomment > div > h3 {
+  border-bottom: solid 2px #a9a9a9;
+  margin-bottom: 5px;
+}
+
+.show-comment{
+  display: grid;
+  grid-template-columns: 2fr 10fr;
+}
+
+.show-comment > .show-comment-name {
+  font-weight: bold;
+}
+
+.input-comment {
+  display: grid;
+  grid-template-columns: 10fr 2fr;
+  align-items: center;
+}
+
+.input-comment > div > input {
+  margin: 1em 0;
+  width: 100%;
+  height: 2em;
+}
+
+.input-comment > .input-comment-all {
+  background: #ffdbf4;
+  text-align: center;
+  margin: 0 1em;
+  border: solid 3px #ffbbeb;
+  border-radius: 10px;
+  padding: 2px;
+  font-weight: bold;
+  cursor: pointer;
 }
 </style>
