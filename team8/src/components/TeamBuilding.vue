@@ -304,6 +304,7 @@ export default {
       this.$router.push('/mypage');
     },
     Logout(){
+        localStorage.clear;
         this.$router.push('/');
       }
 

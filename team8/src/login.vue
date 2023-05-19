@@ -59,6 +59,7 @@
                     for(var i =0; i< this.database.username.length;i++){
                             if(this.input.username == this.database.username[i]){
                                 if(this.input.password == this.database.password[i]){
+                                    localStorage.setItem("username", this.input.username);
                                     this.$router.push('community');
                                 }
                             }

@@ -80,6 +80,8 @@
 </template>
 
 <script>
+var username = localStorage.getItem("username");
+
   export default {
     data() {
         return {
@@ -150,7 +152,8 @@
       goToMyPage() {
         this.$router.push('/mypage');
       },
-      Logout(){
+      Logout(){        
+        localStorage.clear;
         this.$router.push('/');
       }
 
