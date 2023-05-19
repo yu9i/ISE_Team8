@@ -52,11 +52,11 @@
           </div>
           <div class="page-profile-bottom" Onclick="">내 프로필 보러가기</div>
         </div>
-        <div class="main-add-postb" @click="AddPost = true"><font-awesome-icon icon="fa-solid fa-square-plus" size="3x"/></div>
+        <div class="main-add-postb" @click="ShowAddPost = true"><font-awesome-icon icon="fa-solid fa-square-plus" size="3x"/></div>
       </div>
     </div>
 
-    <div class="commu-add-post" v-if="AddPost">
+    <div class="commu-add-post" v-if="ShowAddPost">
       <div class="commu-add-new">
         <div class="commu-add-title">
           <input type="text" id="commu-add-title" v-model="PostForm.title" required minlength="2" @input="PostLimitText" placeholder="제목을 입력하세요">
@@ -82,7 +82,7 @@
   export default {
     data() {
         return {
-            AddPost: false,
+            ShowAddPost: false,
             ShowPost: false,
             titleLength: 0,
             contentLength: 0,
@@ -108,7 +108,7 @@
       },
 
       AddPost(){
-        // this.style.display = "block";
+        console.log(this.AddPost);
       },
 
       PostAll(){
