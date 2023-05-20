@@ -59,7 +59,7 @@
               <thead>
                 <tr>
                   <th>신청인</th>
-                  <th>내용</th>
+                  <th>학과/학번</th>
                   <th>승인/거절</th>
                 </tr>
               </thead>
@@ -158,7 +158,7 @@
               <thead>
                 <tr>
                   <th>신청인</th>
-                  <th>내용</th>
+                  <th>학과/학번</th>
                   <th>지원 현황</th>
                 </tr>
               </thead>
@@ -295,8 +295,8 @@ export default {
       }
 
       const newRequest = {
-        userName: localStorage.getItem("username"),
-        message: '신청 메시지',
+        userName: localStorage.getItem("name"),
+        message: localStorage.getItem("department")+" / "+localStorage.getItem("number").substring(2,4),
         approved: false,
       };
 
