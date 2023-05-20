@@ -52,6 +52,10 @@
       </div>
 
       <div class="main-page">
+        <div class="search">
+          <div><input type="text" id="search" placeholder="입력해주세요"></div>
+          <div class="search-btn">검색</div>
+        </div>
         <div class="page-home" @click="goToMainPage">Home</div>
         <div class="page-team" @click="goToTeamPage">Team</div>
         <div class="page-profile">
@@ -631,6 +635,36 @@ var username = localStorage.getItem("username");
 }
 
 .post-detail-likecomment > .likecomment > .like-icon {
+  cursor: pointer;
+}
+
+.search{
+  display:flex;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.search {
+  width: 100%;
+}
+
+.search > div {
+  margin: 0 2px;
+}
+
+.search > div > input {
+  width: 140px;
+  padding: 1px auto;
+  font-size: 0.8em;
+}
+
+.search > .search-btn {
+  border: solid 2px #9090ff;
+  border-radius: 10px;
+  padding: 1px 4px;
+  font-size: 0.9em;
   cursor: pointer;
 }
 </style>
