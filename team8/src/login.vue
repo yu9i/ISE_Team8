@@ -45,26 +45,49 @@
                     registername: "",
                     registerpw:"",
                     registerpwcheck: ""
+                },
+                database: {
+                    nmcheck: "1",
+                    username: [],
+                    password: [],
                 }
             }
         },
         methods: {
             login() {
                 if(this.input.username != "" && this.input.password != "") {
-                    if(this.input.username == "1234" && this.input.password == "1q2w3e4r!") {
-                        //로그인 성공
-                        console.log("로그인 성공");
-                    } else {
-                        console.log("아이디 혹은 비밀번호 오류");
-                    }
+                    for(var i =0; i< this.database.username.length;i++){
+                            if(this.input.username == this.database.username[i]){
+                                if(this.input.password == this.database.password[i]){
+                                    localStorage.setItem("username", this.input.username);
+                                    this.$router.push('community');
+                                }
+                            }
+                        }
+                    
                 } else {
-                    console.log("아이디 혹은 비밀번호를 입력하세요");
+                    alert("아이디 혹은 비밀번호 오류");
                 }
             },
             register(){
                 if(this.input.registerpw != "" && this.input.registerpwcheck !="" && this.input.registername != ""){
                     if(this.input.registerpw != this.input.registerpwcheck){
-                        console.log("비밀번호 확인 오류");
+                        alert("비밀번호 확인 오류");
+                    }
+                    else{
+                        for(var i =0; i< this.database.username.length;i++){
+                            if(this.input.registername == this.database.username[i]){
+                                alert("이미 존재하는 사용자 이름입니다");
+                                this.database.nmcheck = 0;
+                                break;
+                            }
+                        }
+                        if (this.database.nmcheck==1){ 
+                        this.database.username.push(this.input.registername);
+                        this.database.password.push(this.input.registerpw);
+                        alert("사용자 생성 성공");
+                        }
+                        this.database.nmcheck = 1;
                     }
                 }
             }
@@ -73,7 +96,6 @@
 </script>
 
 <style>
-
 #login .form-inputs {
     text-align: center;
     padding-bottom: 10px;
@@ -94,7 +116,6 @@
     float: right;
     text-align: center;
 }
-
 </style>
 
 

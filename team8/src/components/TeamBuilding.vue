@@ -1,5 +1,4 @@
 <template>
-  <div class="page-container" :style="{}">
     <div class = "page-content">
       <div class="main-content">
         <div class = "left-content">
@@ -119,8 +118,8 @@
       </div>
 
       <div class="main-page">
-        <div class="page-home" Onclick="">Home</div>
-        <div class="page-team" Onclick="">Team</div>
+        <div class="page-home" @click="goToMainPage">Home</div>
+        <div class="page-team" @click="goToTeamPage">Team</div>
         <div class="page-profile">
           <div class="page-profile-top">
             <div id="page-profile-pic"></div>
@@ -130,11 +129,11 @@
             <div id="page-profile-dep">소프트웨어학과</div>
             <div id="page-profile-grad">2025년 2월 졸업 예정</div>
           </div>
-          <div class="page-profile-bottom" Onclick="">내 프로필 보러가기</div>
+          <div class="page-profile-bottom" @click="goToMyPage">내 프로필 보러가기</div>
+          <div class="page-profile-bottom" @click="Logout">로그아웃 하기</div>
         </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -295,6 +294,20 @@ export default {
         alert("비밀번호가 잘못되었습니다.");
       }
     },
+    goToMainPage() {
+      this.$router.push('/community');
+    },
+    goToTeamPage() {
+      this.$router.push('/teambuilding');
+    },
+    goToMyPage() {
+      this.$router.push('/mypage');
+    },
+    Logout(){
+        localStorage.clear;
+        this.$router.push('/');
+      }
+
   }
 };
 </script>
@@ -317,7 +330,7 @@ body {
   background-color: #ffffff;
   padding: 1rem;
   display: grid; 
-  grid-template-columns: 1fr 2fr; 
+  grid-template-columns: 2fr 6fr; 
   gap: 3rem;
 }
 
@@ -615,7 +628,7 @@ button:hover {
 }
 
 .main-page { /*absolute*/
-  width: 80%;
+  width: 100%;
   align-content: center;
   display: flex;
   flex-direction: column;
