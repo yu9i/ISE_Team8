@@ -99,8 +99,8 @@
           <div class="post-detail-likecomment">
             <div class="likecomment">
               <div class="like-icon">
-                <font-awesome-icon icon="fa-regular fa-heart" size="lg" v-if="!likeit" @click="likeit=!likeit; selectedPost.like++;"/>
-                <font-awesome-icon icon="fa-solid fa-heart" size="lg" v-if="likeit" @click="likeit=!likeit; selectedPost.like--;"/>
+                <font-awesome-icon icon="fa-regular fa-heart" size="lg" v-if="!likeit" @click="likeit=true; selectedPost.good+=1;"/>
+                <font-awesome-icon icon="fa-solid fa-heart" size="lg" v-if="likeit" @click="likeit=false; selectedPost.good-=1;"/>
               </div>
               <div class="like-num">{{selectedPost.good}}</div>
               <div class="comment-icon"><font-awesome-icon icon="fa-regular fa-comment" size="lg"/></div>
@@ -179,6 +179,7 @@
           alert("댓글은 2자 이상으로 작성해주세요.");
           return;
         }
+        console.log(selectedPost);
         
         const com = {
           id: this.selectedPost.comment.length+1,
@@ -562,6 +563,10 @@
   border-radius: 10px;
   padding: 2px;
   font-weight: bold;
+  cursor: pointer;
+}
+
+.post-detail-likecomment > .likecomment > .like-icon {
   cursor: pointer;
 }
 </style>
