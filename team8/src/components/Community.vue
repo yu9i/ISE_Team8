@@ -4,7 +4,7 @@
 </script>
 
 <template>
-  <div class="main" :style="{}">
+  <div class="main">
     <div class="main-community">
       <div class="main-menu">
         <div class="main-menu-box">
@@ -25,15 +25,23 @@
             <div id="post-det">안녕하세요. 저는 소프트웨어학과 ㅁㅁ학번 학생 입니다. 곧, 중간보고서 제출 기간이어서 중간보고서를 작성하고 있는데 궁금한 점이 몇 개 있습니다. 보고서 양식을 보면 서명란이 있는데 교수님께 작접 서명을 안 받아도 되는 것이 맞나요? 그리고 제출할 때 파일 양식은 따로 정해져 있나요? 제출 양식 관련 내용이 안 적혀져 있어서 질문 드립니다.</div>
           </div>
           <div class="likecomment">
-            <div class="like"></div>
-            <div class="comment"></div>
+            <div class="like-icon"><font-awesome-icon icon="fa-regular fa-heart" size="lg"/></div>
+            <div class="like-num">2</div>
+            <div class="comment-icon"><font-awesome-icon icon="fa-regular fa-comment" size="lg"/></div>
+            <div class="comment-num">10</div>
           </div>
         </div>
-        <div v-for="post in posts" :key="post.id" class="post">
+        <div v-for="post in posts" :key="post.id" class="post" @click="ShowPostDetail(post)">
           <div id="post-title">{{post.title}}</div>
           <div class="post-content">
             <div id="post-pic"></div>
             <div id="post-det">{{post.content}}</div>
+          </div>
+          <div class="likecomment">
+            <div class="like-icon"><font-awesome-icon icon="fa-regular fa-heart" size="lg"/></div>
+            <div class="like-num">{{post.good}}</div>
+            <div class="comment-icon"><font-awesome-icon icon="fa-regular fa-comment" size="lg"/></div>
+            <div class="comment-num">{{post.comment.length}}</div>
           </div>
         </div>
       </div>
@@ -75,6 +83,46 @@
         </div>
       </div>
     </div>
+
+    <div class="post-detail" v-if="ShowPost">
+      <div class="post-detail-out">
+        <div class="xmark" @click="ShowPostDetailClose"><font-awesome-icon icon="fa-solid fa-xmark" style="color: #8f8f8f;" /></div>
+        <div class="post-detail-in">
+          <div class="post-detail-in-top">
+            <div class="post-detail-title">
+              <h1>{{selectedPost.title}}</h1>
+            </div>
+            <div class="post-detail-name">작성자: {{selectedPost.name}}</div>
+            <div class="post-detail-cont">
+              <p>{{selectedPost.content}}</p>
+            </div>
+          </div>
+          <div class="post-detail-likecomment">
+            <div class="likecomment">
+              <div class="like-icon" @click="ChangeGood">
+                <font-awesome-icon icon="fa-regular fa-heart" size="lg" v-if="!likeit" />
+                <font-awesome-icon icon="fa-solid fa-heart" size="lg" v-if="likeit" />
+              </div>
+              <div class="like-num">{{selectedPost.good}}</div>
+              <div class="comment-icon"><font-awesome-icon icon="fa-regular fa-comment" size="lg"/></div>
+              <div class="comment-num">{{selectedPost.comment.length}}</div>
+              
+            </div>
+            <div class="input-likecomment">
+              <div><h3>댓글</h3></div>
+              <div v-for="comment in selectedPost.comment" :key="comment.id" class="show-comment" >
+                <div class="show-comment-name">{{comment.name}}</div>
+                <div class="show-comment-cont">{{comment.comment}}</div>
+              </div>
+              <div class="input-comment">
+                <div><input type="text" id="commu-add-comment" v-model="CommentForm.comment" required minlength="2" @input="CommentLimitText" placeholder="댓글을 입력하세요"></div>
+                <div class="input-comment-all" @click="PostComment">등록</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   
 </template>
@@ -95,10 +143,40 @@ var username = localStorage.getItem("username");
                 file: "",
             },
             posts: [], //post 목록
+            selectedPost: null, //선택된 post
+            commentLength: 0,
+            CommentForm: {
+              name: "name",
+              comment: "",
+            },
+            likeit: false,
         };
     },
 
     methods:{
+
+      ChangeGood(){
+        if(this.likeit){
+          this.likeit = false;
+          this.selectedPost.good-=1;
+        }
+        else {
+          this.likeit = true;
+          this.selectedPost.good+=1;
+        }
+      }, 
+
+      ShowPostDetail(post){
+        this.selectedPost = post;
+        this.ShowPost = true;
+      },
+
+      ShowPostDetailClose(){
+        this.ShowPost = false;
+        this.selectedPost = null;
+        this.CommentForm.comment="";
+      },
+
       PostLimitText() {
         this.titleLength = this.PostForm.title.length;
         this.contentLength = this.PostForm.content.length;
@@ -110,8 +188,28 @@ var username = localStorage.getItem("username");
         }
       },
 
-      AddPost(){
-        console.log(this.AddPost);
+      CommentLimitText(){
+        this.commentLength = this.CommentForm.comment.length;
+        if (this.commentLength > 30) {
+          alert('댓글은 2자 이상, 30자 이하로 작성해주세요.');
+        }
+      },
+
+      PostComment(){
+        this.commentLength = this.CommentForm.comment.length;
+        if(this.commentLength < 2){
+          alert("댓글은 2자 이상으로 작성해주세요.");
+          return;
+        }
+        
+        const com = {
+          id: this.selectedPost.comment.length+1,
+          name: this.CommentForm.name,
+          comment: this.CommentForm.comment,
+        }
+        this.selectedPost.comment.push(com);
+        this.CommentForm.comment = "";
+
       },
 
       PostAll(){
@@ -255,6 +353,19 @@ var username = localStorage.getItem("username");
   text-overflow: ellipsis;
 }
 
+.likecomment {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 5px;
+}
+
+.likecomment > div {
+  width: 25px;
+}
+
 .main-page {
   width: 100%;
   align-content: center;
@@ -344,10 +455,6 @@ var username = localStorage.getItem("username");
   margin: 5px;
 }
 
-.commu-add-new > .commu-add-title{
-  
-}
-
 .commu-add-new > .commu-add-title > #commu-add-title{
   width: 20em;
   height: 2em;
@@ -357,10 +464,6 @@ var username = localStorage.getItem("username");
 
 .commu-add-new > .commu-add-cont > .commu-word-count{
   text-align: right;
-}
-
-.commu-add-new > .commu-add-file{
-  
 }
 
 .commu-add-ornot {
@@ -391,4 +494,99 @@ var username = localStorage.getItem("username");
   margin: 5px;
 }
 
+.post-detail {
+  display: block;
+}
+
+.post-detail > .post-detail-out {
+  position: fixed;
+  top: 15%;
+  left: 50%;
+  transform: translateX( -50% );
+  width: 60%;
+  background: white;
+  border: solid 1px black;
+  border-radius:10px;
+  padding: 1em;
+  max-height: 550px;
+
+}
+
+.post-detail > .post-detail-out > .xmark {
+  cursor: pointer;
+  text-align: right;
+}
+
+.post-detail > .post-detail-out > .post-detail-in {
+  background: #ffdbe0;
+  border: solid 1px gray;
+  border-radius: 10px;
+  padding: 5px;
+  overflow-y: scroll;
+  max-height: 500px;
+  width: 100%;
+}
+
+.post-detail > .post-detail-out > .post-detail-in > .post-detail-in-top {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.post-detail-cont {
+  margin: 1em;
+  width: 80%;
+}
+
+.input-likecomment {
+  background: white;
+  width: 90%;
+  left: 50%;
+  transform: translateX( -50% );
+  margin: 1em 0;
+  padding: 0.5em 1em;
+}
+
+.input-likecomment > div > h3 {
+  border-bottom: solid 2px #a9a9a9;
+  margin-bottom: 5px;
+}
+
+.show-comment{
+  display: grid;
+  grid-template-columns: 2fr 10fr;
+}
+
+.show-comment > .show-comment-name {
+  font-weight: bold;
+}
+
+.input-comment {
+  display: grid;
+  grid-template-columns: 10fr 2fr;
+  align-items: center;
+}
+
+.input-comment > div > input {
+  margin: 1em 0;
+  width: 100%;
+  height: 2em;
+}
+
+.input-comment > .input-comment-all {
+  background: #ffdbf4;
+  text-align: center;
+  margin: 0 1em;
+  border: solid 3px #ffbbeb;
+  border-radius: 10px;
+  padding: 2px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.post-detail-likecomment > .likecomment > .like-icon {
+  cursor: pointer;
+}
 </style>
