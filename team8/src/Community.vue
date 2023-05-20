@@ -98,9 +98,9 @@
           </div>
           <div class="post-detail-likecomment">
             <div class="likecomment">
-              <div class="like-icon">
-                <font-awesome-icon icon="fa-regular fa-heart" size="lg" v-if="!likeit" @click="likeit=true; selectedPost.good+=1;"/>
-                <font-awesome-icon icon="fa-solid fa-heart" size="lg" v-if="likeit" @click="likeit=false; selectedPost.good-=1;"/>
+              <div class="like-icon" @click="ChangeGood">
+                <font-awesome-icon icon="fa-regular fa-heart" size="lg" v-if="!likeit" />
+                <font-awesome-icon icon="fa-solid fa-heart" size="lg" v-if="likeit" />
               </div>
               <div class="like-num">{{selectedPost.good}}</div>
               <div class="comment-icon"><font-awesome-icon icon="fa-regular fa-comment" size="lg"/></div>
@@ -109,17 +109,13 @@
             </div>
             <div class="input-likecomment">
               <div><h3>댓글</h3></div>
-              <div class="show-comment">
-                <div class="show-comment-name">name: </div>
-                <div class="show-comment-cont">comment content</div>
-              </div>
               <div v-for="comment in selectedPost.comment" :key="comment.id" class="show-comment" >
                 <div class="show-comment-name">{{comment.name}}</div>
                 <div class="show-comment-cont">{{comment.comment}}</div>
               </div>
               <div class="input-comment">
-                <div><input type="text" id="commu-add-title" v-model="CommentForm.title" required minlength="2" @input="CommentLimitText" placeholder="댓글을 입력하세요"></div>
-                <div class="input-comment-all" @onclick="PostComment">등록</div>
+                <div><input type="text" id="commu-add-comment" v-model="CommentForm.comment" required minlength="2" @input="CommentLimitText" placeholder="댓글을 입력하세요"></div>
+                <div class="input-comment-all" @click="PostComment">등록</div>
               </div>
             </div>
           </div>
@@ -155,6 +151,29 @@
     },
 
     methods:{
+
+      ChangeGood(){
+        if(this.likeit){
+          this.likeit = false;
+          this.selectedPost.good-=1;
+        }
+        else {
+          this.likeit = true;
+          this.selectedPost.good+=1;
+        }
+      }, 
+
+      ShowPostDetail(post){
+        this.selectedPost = post;
+        this.ShowPost = true;
+      },
+
+      ShowPostDetailClose(){
+        this.ShowPost = false;
+        this.selectedPost = null;
+        this.CommentForm.comment="";
+      },
+
       PostLimitText() {
         this.titleLength = this.PostForm.title.length;
         this.contentLength = this.PostForm.content.length;
@@ -168,7 +187,7 @@
 
       CommentLimitText(){
         this.commentLength = this.CommentForm.comment.length;
-        if (this.titleLength > 30) {
+        if (this.commentLength > 30) {
           alert('댓글은 2자 이상, 30자 이하로 작성해주세요.');
         }
       },
@@ -179,15 +198,15 @@
           alert("댓글은 2자 이상으로 작성해주세요.");
           return;
         }
-        console.log(selectedPost);
         
         const com = {
           id: this.selectedPost.comment.length+1,
           name: this.CommentForm.name,
-          comment: this.CommentForm.name,
+          comment: this.CommentForm.comment,
         }
         this.selectedPost.comment.push(com);
-        // console.log(selectedPost.comment);
+        this.CommentForm.comment = "";
+
       },
 
       PostAll(){
@@ -219,15 +238,6 @@
         this.ShowAddPost = false;
       },
 
-      ShowPostDetail(post){
-        this.selectedPost = post;
-        this.ShowPost = true;
-      },
-
-      ShowPostDetailClose(){
-        this.ShowPost = false;
-        this.selectedPost = null;
-      },
     }
   }
 </script>
@@ -503,8 +513,9 @@
   border: solid 1px gray;
   border-radius: 10px;
   padding: 5px;
-  overflow-y: auto;
+  overflow-y: scroll;
   max-height: 500px;
+  width: 100%;
 }
 
 .post-detail > .post-detail-out > .post-detail-in > .post-detail-in-top {
