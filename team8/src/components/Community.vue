@@ -8,17 +8,19 @@
     <div class="main-community">
       <div class="main-menu">
         <div class="main-menu-box">
-          <div>졸업작품/논문</div>
-          <div>인턴</div>
-          <div>1만 라인</div>
-          <div>산학협력프로젝트</div>
-          <div>기타</div>
+          <div @click="community=0">전체</div>
+          <div @click="community=1">졸업작품/논문</div>
+          <div @click="community=2">인턴</div>
+          <div @click="community=3">1만 라인</div>
+          <div @click="community=4">산학협력프로젝트</div>
+          <div @click="community=5">기타</div>
         </div>
       </div>
 
       <div class="main-posts">
-        <div id="page-name"><h1>졸업작품/논문</h1></div>
-        <div class="post">
+        <div id="page-name"><h1>Community</h1></div>
+        <div><h3>- {{CommunityTab[community]}} -</h3></div>
+        <div><div class="post">
           <div id="post-title">졸업 작품 관련 질문</div>
           <div class="post-content">
             <div id="post-pic"></div>
@@ -30,8 +32,10 @@
             <div class="comment-icon"><font-awesome-icon icon="fa-regular fa-comment" size="lg"/></div>
             <div class="comment-num">10</div>
           </div>
+          </div>
         </div>
-        <div v-for="post in posts" :key="post.id" class="post" @click="ShowPostDetail(post)">
+        <div v-for="post in posts" :key="post.id" class="" @click="ShowPostDetail(post)">
+          <div class="post" v-if="(community===0 || post.category==community)" >
           <div id="post-title">{{post.title}}</div>
           <div class="post-content">
             <div id="post-pic"></div>
@@ -42,6 +46,7 @@
             <div class="like-num">{{post.good}}</div>
             <div class="comment-icon"><font-awesome-icon icon="fa-regular fa-comment" size="lg"/></div>
             <div class="comment-num">{{post.comment.length}}</div>
+          </div>
           </div>
         </div>
       </div>
@@ -69,6 +74,16 @@
       <div class="commu-add-new">
         <div class="commu-add-title">
           <input type="text" id="commu-add-title" v-model="PostForm.title" required minlength="2" @input="PostLimitText" placeholder="제목을 입력하세요">
+        </div>
+        <div class="commu-add-category">
+          <select id="commu-add-category" v-model="PostForm.category">
+            <option value=0 selected>-카테고리를 선택해주세요-</option>
+            <option value=1>졸업작품/논문</option>
+            <option value=2>인턴</option>
+            <option value=3>1만라인</option>
+            <option value=4>산학협력프로젝트</option>
+            <option value=5>기타</option>
+          </select>
         </div>
         <div class="commu-add-cont">
           <textarea id="comm-add-cont" v-model="PostForm.content" placeholder="내용을 입력해주세요" required rows="20" cols="60"  @input="PostLimitText"></textarea>
@@ -137,12 +152,23 @@ var username = localStorage.getItem("username");
             ShowPost: false,
             titleLength: 0,
             contentLength: 0,
+            community: 0,
+            CommunityTab: {
+              0: "전체",
+              1: "졸업작품/논문",
+              2: "인턴",
+              3: "1만라인",
+              4: "산학협력프로젝트",
+              5: "기타",
+            },
             PostForm: {
                 title: "",
+                category: 0,
                 content: "",
-                file: "",
+                file: null,
             },
             posts: [], //post 목록
+            nowposts:[], //선택 post 목록
             selectedPost: null, //선택된 post
             commentLength: 0,
             CommentForm: {
@@ -154,6 +180,10 @@ var username = localStorage.getItem("username");
     },
 
     methods:{
+
+      ShowCommunity(num){
+        this.community = this.CommunityTab[num];
+      },
 
       ChangeGood(){
         if(this.likeit){
@@ -219,10 +249,15 @@ var username = localStorage.getItem("username");
           alert("제목과 내용은 2자 이상으로 작성해주세요.");
           return;
         }
+        if(this.PostForm.category<1){
+          alert("카테고리를 선택해주세요.");
+          return;
+        }
 
         const post = {
           id: this.posts.length + 1,
           name: "name",
+          category: this.PostForm.category,
           title: this.PostForm.title,
           content: this.PostForm.content,
           good: 0,
@@ -238,7 +273,8 @@ var username = localStorage.getItem("username");
         this.AddPost = false;
         this.PostForm.title = "";
         this.PostForm.content = "";
-        this.PostForm.file = "";
+        this.PostForm.file = null;
+        this.PostForm.category = 0;
         this.contentLength = 0;
       },
       goToMainPage() {
@@ -318,8 +354,13 @@ var username = localStorage.getItem("username");
   padding: 0.5em;
 }
 
-.main-posts > .post {
+.main-posts > div {
   width: 90%;
+  margin: 4px 0;
+}
+
+.main-posts > div > .post {
+  width: 100%;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
@@ -328,20 +369,19 @@ var username = localStorage.getItem("username");
   border: solid 1px black;
   border-radius: 10px;
   padding: 5px;
-  margin: 8px 0;
   cursor: pointer;
 }
 
-.main-posts > .post > #post-title {
+.main-posts > div > .post > #post-title {
   font-weight: bold;
   font-size: 1.2em;
 }
 
-.main-posts > .post > .post-content {
+.main-posts > div > .post > .post-content {
   padding: 0.8em;
 }
 
-.main-posts > .post > .post-content > #post-det {
+.main-posts > div > .post > .post-content > #post-det {
   display: -webkit-box;
   font-size: 1em;
   text-align: left;
@@ -460,6 +500,10 @@ var username = localStorage.getItem("username");
   height: 2em;
   font-size: 1.3em;
   font-weight: bold;
+}
+
+.commu-add-new > .commu-add-category > select {
+  height: 2em;
 }
 
 .commu-add-new > .commu-add-cont > .commu-word-count{
