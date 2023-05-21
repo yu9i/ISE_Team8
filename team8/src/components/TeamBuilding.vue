@@ -20,6 +20,10 @@
                   <div class="word-count">{{ contentLength }}/100자</div>
                 </div>
                 <div class="input-group">
+                  <label for="attachment-input">첨부 파일</label>
+                  <input type="file" id="attachment-input" @change="handleFileChange" accept=".pdf,.docx">
+                </div>
+                <div class="input-group">
                   <label for="recruitment-input">모집인원</label>
                   <input type="number" id="recruitment-input" v-model="recruitForm.recruitment" placeholder="모집 인원" min="0">
                 </div>
@@ -93,10 +97,23 @@
             <div v-for="post in posts" :key="post.id" class="post">
               <div class="team-info">
               <h3 class="team-title">{{ post.title }}</h3>
-              <p class="team-content">{{ post.content }}</p>
-              <p class="team-recruitment">모집 인원: {{ post.recruitment }}</p>
-              <button v-if="!isRecruitmentClosed(post)" @click="applyTeam(post)">신청</button>
-              <p class="recruit-done" v-if="isRecruitmentClosed(post)">마감!</p>
+              <button @click="openApplyModal(post)">확인하기</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-overlay" v-if="showApplyModal">
+            <div class="modal">
+              <div class="modal-content">
+                <span class="close" @click="closeApplyModal">&times;</span>
+                <h3 class="modal-title">{{ newPost.title }}</h3>
+                <p class="team-content">{{ newPost.content }}</p>
+                <div class="team-attachment" v-if="newPost.attachment">
+                   <a :href="newPost.attachment" download>첨부파일 다운로드</a>
+                </div>
+                <p class="team-recruitment">모집 인원: {{ newPost.recruitment }}</p>
+                <button v-if="!isRecruitmentClosed(newPost)" @click="applyTeam(newPost)">신청하기</button>
+                <p class="recruit-done" v-if="isRecruitmentClosed(newPost)">마감!</p>
               </div>
             </div>
           </div>
@@ -194,16 +211,18 @@ export default {
       showModal: false,
       showRequestModal: false,
       showStatusModal: false,
+      showApplyModal: false,
       showPasswordModal: false,
       recruitForm: {
         title: "",
         content: "",
+        attachment: null,
         recruitment: 0,
         password: "",
       },
       posts: [], // Recruit 글 목록
       teams: [], // 팀 목록
-      appliedUsers: [],
+      appliedUsers: {},
       selectedTeam: null, // 선택된 팀
       passwordInput: '',
     };
@@ -211,6 +230,25 @@ export default {
   mounted() {
     window.addEventListener('resize', this.handleResize);
     this.handleResize();
+
+    const existingTeamInfo = localStorage.getItem("teamInfo")
+    const teamInfo = JSON.parse(existingTeamInfo);
+    
+    for (const teamId in teamInfo) {
+      if (teamInfo.hasOwnProperty(teamId)) {
+        this.posts.push(teamInfo[teamId]);
+      }
+    }
+
+    const existingApplyInfo = localStorage.getItem("applyInfo");
+    const applyInfo = JSON.parse(existingApplyInfo);
+
+    for (const teamId in applyInfo) {
+      if (applyInfo.hasOwnProperty(teamId)) {
+        this.teams.push(applyInfo[teamId]);
+      }
+    }
+
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.handleResize);
@@ -247,34 +285,69 @@ export default {
       }
     },
     postRecruit() { 
-      if (!/^\d{4}$/.test(this.recruitForm.password)) {
+      if (!this.recruitForm.title){
+        alert("제목을 입력해주세요.");
+        return;
+      } 
+      else if(!this.recruitForm.content){
+        alert("내용을 입력해주세요.");
+        return;
+      }
+      else if (this.recruitForm.recruitment === 0) {
+        alert("모집인원은 1명 이상이어야 합니다.");
+        return;
+      }
+      else if(!this.recruitForm.password) {
+        alert("비밀번호를 입력해주세요.");
+        return;
+      }
+      else if (!/^\d{4}$/.test(this.recruitForm.password)) {
         alert("비밀번호는 4자리 숫자로 입력해주세요.");
         return;
       }
 
-      const post = {
-        id: this.posts.length + 1,
+      
+      const existingTeamInfo = JSON.parse(localStorage.getItem('teamInfo')) || {};
+
+      const teamId = this.posts.length + 1;
+      existingTeamInfo[teamId] = {
+        id: teamId,
         title: this.recruitForm.title,
         content: this.recruitForm.content,
         recruitment: this.recruitForm.recruitment,
+        attachment: this.recruitForm.attachment,
         password: this.recruitForm.password,
         members: [],
-        
       };
-      this.posts.push(post);
+      
+
+      this.posts.push(existingTeamInfo[teamId]);
 
       this.recruitForm.title = '';
       this.recruitForm.content = '';
       this.recruitForm.recruitment = 0;
+      this.recruitForm.attachment = null;
       this.recruitForm.password = '';
       this.contentLength = 0;
       this.showModal = false;
+
+      // 팀 정보를 localStorage에 저장
+      const serializedTeamInfo = JSON.stringify(existingTeamInfo);
+      localStorage.setItem("teamInfo", serializedTeamInfo);
+
     },
+    handleFileChange(event) {
+      const file = event.target.files[0];
+      const fileURL = URL.createObjectURL(file);
+      this.recruitForm.attachment = fileURL;
+    },
+
     resetRecruit(){
       this.recruitForm.title = '';
       this.recruitForm.content = '';
       this.recruitForm.recruitment = 0;
       this.recruitForm.password = '';
+      this.recruitForm.attachment = null;
       this.contentLength = 0;
       this.showModal = false;
     },
@@ -282,14 +355,18 @@ export default {
       const existingTeam = this.teams.find((team) => team.id === post.id);
       const approvedRequestsCount = existingTeam ? existingTeam.requests.filter((request) => request.approved).length : 0;
 
+      if(localStorage.getItem("appliedUsers") != null){
+        this.appliedUsers = JSON.parse(localStorage.getItem("appliedUsers"));
+      };
+
       if (approvedRequestsCount >= post.recruitment) {
         alert('신청이 마감되었습니다.');
         return;
       }
-      
+
       const username = localStorage.getItem("username");
-      console.log(username)
-      if (this.appliedUsers.includes(username)) {
+
+      if (this.appliedUsers.hasOwnProperty(post.id) && this.appliedUsers[post.id].includes(username)) {
         alert("이미 신청하셨습니다!");
         return;
       }
@@ -311,8 +388,31 @@ export default {
           requests: [newRequest],
         };
         this.teams.push(team);
-        this.appliedUsers.push(username);
       }
+      // appliedUsers에 신청한 사용자 정보 저장
+      if (!this.appliedUsers.hasOwnProperty(post.id)) {
+        this.appliedUsers[post.id] = [];
+      }
+      this.appliedUsers[post.id].push(username);
+
+      const existingApplyInfo = JSON.parse(localStorage.getItem('applyInfo')) || {};
+      for (const team of this.teams) {
+        existingApplyInfo[team.id] = team;
+      }
+      const serializedApplyInfo = JSON.stringify(existingApplyInfo);
+      localStorage.setItem("applyInfo", serializedApplyInfo);
+
+      const serializedAppliedUsers = JSON.stringify(this.appliedUsers);
+      localStorage.setItem("appliedUsers", serializedAppliedUsers);
+
+    },
+    openApplyModal(post){
+      this.newPost = post;
+      this.showApplyModal = true;
+    },
+    closeApplyModal() {
+      this.newPost = null;
+      this.showApplyModal = false;
     },
     approveRequest(team, request) {
       if (team.requests.filter((r) => r.approved).length >= team.recruitment) {
@@ -320,9 +420,21 @@ export default {
         return;
       }
       request.approved = true;
+
+      // 로컬 스토리지 업데이트
+      const existingApplyInfo = JSON.parse(localStorage.getItem('applyInfo')) || {};
+      existingApplyInfo[team.id] = team;
+      const serializedApplyInfo = JSON.stringify(existingApplyInfo);
+      localStorage.setItem("applyInfo", serializedApplyInfo);
+
     },
     rejectRequest(team, request) {
       request.rejected = true;
+      // 로컬 스토리지 업데이트
+      const existingApplyInfo = JSON.parse(localStorage.getItem('applyInfo')) || {};
+      existingApplyInfo[team.id] = team;
+      const serializedApplyInfo = JSON.stringify(existingApplyInfo);
+      localStorage.setItem("applyInfo", serializedApplyInfo);
     },
     getApprovedCount(team) {
       return team.requests.filter((r) => r.approved).length;
@@ -337,7 +449,6 @@ export default {
       this.showRequestModal = false;
     },
     openStatusModal(team){
-      console.log("hi")
       this.selectedTeam = team;
       this.showStatusModal = true;
     },
