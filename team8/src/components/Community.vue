@@ -176,7 +176,7 @@ var username = localStorage.getItem("username");
         selectedPost: null, //선택된 post
         commentLength: 0,
         CommentForm: {
-          name: "name",
+          name: username,
           comment: "",
         },
         likeit: false,
@@ -260,7 +260,7 @@ var username = localStorage.getItem("username");
 
         const post = {
           id: this.posts.length + 1,
-          name: "name",
+          name: username + " (" + localStorage.getItem("number").substring(2,4) + ")",
           category: this.PostForm.category,
           title: this.PostForm.title,
           content: this.PostForm.content,
