@@ -34,8 +34,8 @@
           </div>
           </div>
         </div>
-        <div v-for="post in posts" :key="post.id" class="" @click="ShowPostDetail(post)">
-          <div class="post" v-if="(community===0 || post.category==community)" >
+        <div v-for="post in posts" :key="post.id" @click="ShowPostDetail(post)">
+          <div class="post" v-if="(community===0 || post.category==community) && (post.content.includes(searchword)||post.title.includes(searchword))" >
           <div id="post-title">{{post.title}}</div>
           <div class="post-content">
             <div id="post-pic"></div>
@@ -53,8 +53,7 @@
 
       <div class="main-page">
         <div class="search">
-          <div><input type="text" id="search" v-model="searchword" placeholder="입력해주세요"></div>
-          <div class="search-btn" @click="SearchBtn">검색</div>
+          <input type="text" id="search" v-model="searchword" placeholder="입력해주세요">
         </div>
         <div class="page-home" @click="goToMainPage">Home</div>
         <div class="page-team" @click="goToTeamPage">Team</div>
@@ -185,15 +184,6 @@ var username = localStorage.getItem("username");
     },
 
     methods:{
-
-      SearchBtn(){
-        let word = this.searchword.length;
-        if(word<2){
-          alert("검색은 2자 이상부터 입니다.");
-          return;
-        }
-        
-      },
 
       ShowCommunity(num){
         this.community = this.CommunityTab[num];
@@ -648,34 +638,11 @@ var username = localStorage.getItem("username");
   cursor: pointer;
 }
 
-.search{
-  display:flex;
-  align-items: center;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-around;
-}
-
-.search {
+.search > input {
+  border: solid 2px #b6b1b1;
+  border-radius: 5px;
   width: 100%;
-}
-
-.search > div {
-  margin: 0 2px;
-}
-
-.search > div > input {
-  width: 100%;
-  font-size: 0.8em;
-}
-
-.search > .search-btn {
-  width: 20%;
-  text-align: center;
-  border: solid 2px #9090ff;
-  border-radius: 10px;
-  padding: 1px 4px;
   font-size: 0.9em;
-  cursor: pointer;
 }
+
 </style>
