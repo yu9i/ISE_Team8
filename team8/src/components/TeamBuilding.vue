@@ -478,7 +478,11 @@ export default {
       this.$router.push('/mypage');
     },
     Logout(){
-        localStorage.clear;
+        localStorage.removeItem("username");
+        localStorage.removeItem("department");
+        localStorage.removeItem("number");
+        localStorage.removeItem("date");
+        localStorage.removeItem("name");
         this.$router.push('/');
       }
 

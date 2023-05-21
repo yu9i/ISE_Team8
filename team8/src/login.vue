@@ -33,7 +33,6 @@
     
 
 </template>
-
 <script>
     export default {
         name: 'Login',
@@ -55,6 +54,8 @@
         },
         methods: {
             login() {
+                this.database.username=localStorage.getArray("userInfo");
+                this.database.password=localStorage.getArray("userpw");
                 if(this.input.username != "" && this.input.password != "") {
                     for(var i =0; i< this.database.username.length;i++){
                             if(this.input.username == this.database.username[i]){
@@ -70,6 +71,8 @@
                 }
             },
             register(){
+                this.database.username=localStorage.getArray("userInfo");
+                this.database.password=localStorage.getArray("userpw");
                 if(this.input.registerpw != "" && this.input.registerpwcheck !="" && this.input.registername != ""){
                     if(this.input.registerpw != this.input.registerpwcheck){
                         alert("비밀번호 확인 오류");
@@ -83,8 +86,8 @@
                             }
                         }
                         if (this.database.nmcheck==1){ 
-                        this.database.username.push(this.input.registername);
-                        this.database.password.push(this.input.registerpw);
+                        localStorage.pushArrayItem("userInfo",this.input.registername);
+                        localStorage.pushArrayItem("userpw",this.input.registerpw);
                         alert("사용자 생성 성공");
                         }
                         this.database.nmcheck = 1;
@@ -93,6 +96,22 @@
             }
         }
     }
+
+Storage.prototype.getArray = function(array) {
+    var arraygoal = [];
+    var Arraydest = this.getItem(array);
+    if (typeof Arraydest !== "undefined") {
+        if (Arraydest !== null) { arraygoal = JSON.parse(Arraydest); }
+  }
+return arraygoal;
+}
+
+Storage.prototype.pushArrayItem = function(arrayName,Item) {
+    var targetarray = this.getArray(arrayName);
+    targetarray.push(Item);
+    this.setItem(arrayName,JSON.stringify(targetarray));
+}
+
 </script>
 
 <style>

@@ -175,6 +175,11 @@
         this.$router.push('/mypage');
       },
       Logout(){
+        localStorage.removeItem("username");
+        localStorage.removeItem("department");
+        localStorage.removeItem("number");
+        localStorage.removeItem("date");
+        localStorage.removeItem("name");
         this.$router.push('/');
       },
       save(){
