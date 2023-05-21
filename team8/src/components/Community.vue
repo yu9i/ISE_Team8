@@ -53,8 +53,8 @@
 
       <div class="main-page">
         <div class="search">
-          <div><input type="text" id="search" placeholder="입력해주세요"></div>
-          <div class="search-btn">검색</div>
+          <div><input type="text" id="search" v-model="searchword" placeholder="입력해주세요"></div>
+          <div class="search-btn" @click="SearchBtn">검색</div>
         </div>
         <div class="page-home" @click="goToMainPage">Home</div>
         <div class="page-team" @click="goToTeamPage">Team</div>
@@ -151,39 +151,49 @@ var username = localStorage.getItem("username");
 
   export default {
     data() {
-        return {
-            ShowAddPost: false,
-            ShowPost: false,
-            titleLength: 0,
-            contentLength: 0,
-            community: 0,
-            CommunityTab: {
-              0: "전체",
-              1: "졸업작품/논문",
-              2: "인턴",
-              3: "1만라인",
-              4: "산학협력프로젝트",
-              5: "기타",
-            },
-            PostForm: {
-                title: "",
-                category: 0,
-                content: "",
-                file: null,
-            },
-            posts: [], //post 목록
-            nowposts:[], //선택 post 목록
-            selectedPost: null, //선택된 post
-            commentLength: 0,
-            CommentForm: {
-              name: "name",
-              comment: "",
-            },
-            likeit: false,
-        };
+      return {
+        searchword: "",
+        ShowAddPost: false,
+        ShowPost: false,
+        titleLength: 0,
+        contentLength: 0,
+        community: 0,
+        CommunityTab: {
+          0: "전체",
+          1: "졸업작품/논문",
+          2: "인턴",
+          3: "1만라인",
+          4: "산학협력프로젝트",
+          5: "기타",
+        },
+        PostForm: {
+          title: "",
+          category: 0,
+          content: "",
+          file: null,
+        },
+        posts: [], //post 목록
+        nowposts:[], //선택 post 목록
+        selectedPost: null, //선택된 post
+        commentLength: 0,
+        CommentForm: {
+          name: "name",
+          comment: "",
+        },
+        likeit: false,
+      };
     },
 
     methods:{
+
+      SearchBtn(){
+        let word = this.searchword.length;
+        if(word<2){
+          alert("검색은 2자 이상부터 입니다.");
+          return;
+        }
+        
+      },
 
       ShowCommunity(num){
         this.community = this.CommunityTab[num];
@@ -655,12 +665,13 @@ var username = localStorage.getItem("username");
 }
 
 .search > div > input {
-  width: 140px;
-  padding: 1px auto;
+  width: 100%;
   font-size: 0.8em;
 }
 
 .search > .search-btn {
+  width: 20%;
+  text-align: center;
   border: solid 2px #9090ff;
   border-radius: 10px;
   padding: 1px 4px;
