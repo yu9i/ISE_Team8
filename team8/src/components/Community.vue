@@ -20,7 +20,7 @@
       <div class="main-posts">
         <div id="page-name"><h1>Community</h1></div>
         <div><h3>- {{CommunityTab[community]}} -</h3></div>
-        <div><div class="post">
+        <!-- <div><div class="post">
           <div id="post-title">졸업 작품 관련 질문</div>
           <div class="post-content">
             <div id="post-pic"></div>
@@ -33,7 +33,7 @@
             <div class="comment-num">10</div>
           </div>
           </div>
-        </div>
+        </div> -->
         <div v-for="post in posts" :key="post.id" @click="ShowPostDetail(post)">
           <div class="post" v-if="(community===0 || post.category==community) && (post.content.includes(searchword)||post.title.includes(searchword))" >
           <div id="post-title">{{post.title}}</div>
@@ -176,7 +176,7 @@ var username = localStorage.getItem("username");
         selectedPost: null, //선택된 post
         commentLength: 0,
         CommentForm: {
-          name: username,
+          name: "name",
           comment: "",
         },
         likeit: false,
@@ -260,7 +260,8 @@ var username = localStorage.getItem("username");
 
         const post = {
           id: this.posts.length + 1,
-          name: username + " (" + localStorage.getItem("number").substring(2,4) + ")",
+          name: "name",
+          // name: name + " (" + localStorage.getItem("number").substring(2,4) + ")",
           category: this.PostForm.category,
           title: this.PostForm.title,
           content: this.PostForm.content,
