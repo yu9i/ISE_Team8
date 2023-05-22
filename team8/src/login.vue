@@ -27,6 +27,24 @@
             <label for="registerpwcheck">비밀번호 확인</label>
             <input type="password" id="registerpwcheck" name="registerpwcheck" v-model="input.registerpwcheck" placeholder="비밀번호 확인" />
         </div>
+        <table id = "information">
+            <tr>
+                <td class="category">이름</td>
+                <td><input type="text" id="name" placeholder="홍길동"></td>
+            </tr>
+            <tr>
+                <td>학과</td>
+                <td><input type="text" id="department" placeholder="솦트"></td>
+            </tr>
+            <tr>
+                <td class="category">학번</td>
+                <td><input type="text" id="number" placeholder="209394841"></td>
+            </tr>
+            <tr>
+                <td class="category">졸업예정</td>
+                <td><input type="text" id="date" placeholder="예시)24년02월"></td>
+            </tr>
+        </table>
         <button id ="registerbtn" type="button" v-on:click="register()">회원가입</button>
     </div>
     </div>
@@ -88,12 +106,20 @@
                         if (this.database.nmcheck==1){ 
                         localStorage.pushArrayItem("userInfo",this.input.registername);
                         localStorage.pushArrayItem("userpw",this.input.registerpw);
+                        localStorage.setItem("name",document.getElementById("name").value);
+                        localStorage.setItem("department",document.getElementById("department").value);
+                        localStorage.setItem("number",document.getElementById("number").value);
+                        localStorage.setItem("date",document.getElementById("date").value);
                         alert("사용자 생성 성공");
+                        document.getElementById("name").value = "";
+                        document.getElementById("department").value = "";
+                        document.getElementById("number").value = "";
+                        document.getElementById("date").value = "";
                         }
                         this.database.nmcheck = 1;
                     }
                 }
-            }
+            }     
         }
     }
 

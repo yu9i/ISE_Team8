@@ -15,19 +15,19 @@
         <table id = "information">
             <tr>
                 <td class="category">이름</td>
-                <td><input type="text" id="name" value="홍길동"></td>
+                <td><input type="text" id="name" :value="info.name"></td>
             </tr>
             <tr>
                 <td>학과</td>
-                <td><input type="text" id="department" value="솦트"></td>
+                <td><input type="text" id="department" :value="info.department"></td>
             </tr>
             <tr>
                 <td class="category">학번</td>
-                <td><input type="text" id="number" value="209394841"></td>
+                <td><input type="text" id="number" :value="info.number"></td>
             </tr>
             <tr>
                 <td class="category">졸업예정</td>
-                <td><input type="date" id="date" value="date"></td>
+                <td><input type="text" id="date" :value="info.date"></td>
             </tr>
             <tr>
                 <td class="category">3품</td>
@@ -156,15 +156,23 @@
 </template>
 
 <script>
+
+
+
   export default {
     data() {
+      
         return {
-            
-        };
+          info:{
+        name: localStorage.getItem("name"),
+        department : localStorage.getItem("department"),
+        number : localStorage.getItem("number"),
+        date : localStorage.getItem("date")
+      }
+        }
     },
 
     methods:{
-      
       goToMainPage() {
         this.$router.push('/community');
       },
@@ -189,6 +197,7 @@
         localStorage.setItem("date",document.getElementById("date").value);
       }
     }
+    
   }
 </script>
 
