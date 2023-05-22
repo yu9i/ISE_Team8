@@ -140,11 +140,11 @@
         <div class="page-profile">
           <div class="page-profile-top">
             <div id="page-profile-pic"></div>
-            <div id="page-profile-name">이름</div>
+            <div id="page-profile-name">{{info.name}}</div>
           </div>
           <div class="page-profile-mid">
-            <div id="page-profile-dep">소프트웨어학과</div>
-            <div id="page-profile-grad">2025년 2월 졸업 예정</div>
+            <div id="page-profile-dep">{{info.department}}</div>
+            <div id="page-profile-grad">{{info.date}} 졸업 예정</div>
           </div>
           <div class="page-profile-bottom" @click="goToMyPage">내 프로필 보러가기</div>
           <div class="page-profile-bottom" @click="Logout">로그아웃 하기</div>
@@ -204,6 +204,12 @@
 export default {
   data() {
     return {
+      info:{
+        name: localStorage.getItem("name"),
+        department : localStorage.getItem("department"),
+        number : localStorage.getItem("number"),
+        date : localStorage.getItem("date")
+      },
       width: 0,
       height: 0,
       contentLength: 0,
