@@ -67,6 +67,10 @@
                     nmcheck: "1",
                     username: [],
                     password: [],
+                    name:[],
+                    department:[],
+                    number: [],
+                    date:[]
                 }
             }
         },
@@ -74,11 +78,20 @@
             login() {
                 this.database.username=localStorage.getArray("userInfo");
                 this.database.password=localStorage.getArray("userpw");
+                this.database.name=localStorage.getArray("namelist");
+                this.database.department=localStorage.getArray("departmentlist");
+                this.database.number=localStorage.getArray("numberlist");
+                this.database.date=localStorage.getArray("datelist");
                 if(this.input.username != "" && this.input.password != "") {
                     for(var i =0; i< this.database.username.length;i++){
                             if(this.input.username == this.database.username[i]){
                                 if(this.input.password == this.database.password[i]){
                                     localStorage.setItem("username", this.input.username);
+                                    localStorage.setItem("name",this.database.name[i]);
+                                    localStorage.setItem("department",this.database.department[i]);
+                                    localStorage.setItem("number",this.database.department[i]);
+                                    localStorage.setItem("date",this.database.date[i]);
+                                    localStorage.setItem("userid", i);
                                     this.$router.push('community');
                                 }
                             }
@@ -106,11 +119,12 @@
                         if (this.database.nmcheck==1){ 
                         localStorage.pushArrayItem("userInfo",this.input.registername);
                         localStorage.pushArrayItem("userpw",this.input.registerpw);
-                        localStorage.setItem("name",document.getElementById("name").value);
-                        localStorage.setItem("department",document.getElementById("department").value);
-                        localStorage.setItem("number",document.getElementById("number").value);
-                        localStorage.setItem("date",document.getElementById("date").value);
+                        localStorage.pushArrayItem("namelist",document.getElementById("name").value);
+                        localStorage.pushArrayItem("departmentlist",document.getElementById("department").value);
+                        localStorage.pushArrayItem("numberlist",document.getElementById("number").value);
+                        localStorage.pushArrayItem("datelist",document.getElementById("date").value);
                         alert("사용자 생성 성공");
+                        //초기화
                         document.getElementById("name").value = "";
                         document.getElementById("department").value = "";
                         document.getElementById("number").value = "";
@@ -135,6 +149,12 @@ return arraygoal;
 Storage.prototype.pushArrayItem = function(arrayName,Item) {
     var targetarray = this.getArray(arrayName);
     targetarray.push(Item);
+    this.setItem(arrayName,JSON.stringify(targetarray));
+}
+
+Storage.prototype.setArrayItem = function(arrayName,Item, id) {
+    var targetarray = this.getArray(arrayName);
+    targetarray[id] = Item;
     this.setItem(arrayName,JSON.stringify(targetarray));
 }
 

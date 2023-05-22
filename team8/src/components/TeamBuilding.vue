@@ -205,10 +205,10 @@ export default {
   data() {
     return {
       info:{
-        name: localStorage.getItem("name"),
-        department : localStorage.getItem("department"),
-        number : localStorage.getItem("number"),
-        date : localStorage.getItem("date")
+        name: localStorage.getArray("namelist")[localStorage.getItem("userid")],
+        department : localStorage.getArray("departmentlist")[localStorage.getItem("userid")],
+        number : localStorage.getArray("numberlist")[localStorage.getItem("userid")],
+        date : localStorage.getArray("datelist")[localStorage.getItem("userid")],
       },
       width: 0,
       height: 0,
@@ -485,10 +485,6 @@ export default {
     },
     Logout(){
         localStorage.removeItem("username");
-        localStorage.removeItem("department");
-        localStorage.removeItem("number");
-        localStorage.removeItem("date");
-        localStorage.removeItem("name");
         this.$router.push('/');
       }
 

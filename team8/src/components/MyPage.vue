@@ -164,10 +164,10 @@
       
         return {
           info:{
-        name: localStorage.getItem("name"),
-        department : localStorage.getItem("department"),
-        number : localStorage.getItem("number"),
-        date : localStorage.getItem("date")
+        name: localStorage.getArray("namelist")[localStorage.getItem("userid")],
+        department : localStorage.getArray("departmentlist")[localStorage.getItem("userid")],
+        number : localStorage.getArray("numberlist")[localStorage.getItem("userid")],
+        date : localStorage.getArray("datelist")[localStorage.getItem("userid")],
       }
         }
     },
@@ -184,17 +184,13 @@
       },
       Logout(){
         localStorage.removeItem("username");
-        localStorage.removeItem("department");
-        localStorage.removeItem("number");
-        localStorage.removeItem("date");
-        localStorage.removeItem("name");
         this.$router.push('/');
       },
       save(){
-        localStorage.setItem("name",document.getElementById("name").value);
-        localStorage.setItem("department",document.getElementById("department").value);
-        localStorage.setItem("number",document.getElementById("number").value);
-        localStorage.setItem("date",document.getElementById("date").value);
+        localStorage.setArrayItem("namelist",document.getElementById("name").value, localStorage.getItem("userid"));
+        localStorage.setArrayItem("departmentlist",document.getElementById("department").value, localStorage.getItem("userid"));
+        localStorage.setArrayItem("numberlist",document.getElementById("number").value, localStorage.getItem("userid"));
+        localStorage.setArrayItem("datelist",document.getElementById("date").value, localStorage.getItem("userid"));
       }
     }
     
